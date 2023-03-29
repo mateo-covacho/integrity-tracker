@@ -22,14 +22,13 @@ import {
   TagGroup,
 } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { useUser } from '@auth0/nextjs-auth0/client';
-
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Home = () => {
-	const userData = useUser();
-	console.log(userData.user)
+  const userData = useUser();
+  console.log(userData.user);
   return (
     <Container style={{ height: "100vh" }}>
       <Head>
@@ -50,98 +49,116 @@ const Home = () => {
         </Nav>
       </Header>
       <Container style={{ height: "100%" }}>
-        <Sidebar style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-          <Sidenav style={{ height: "100%" }}>
-            <Sidenav.Body style={{ height: "100%" }}>
-              <Nav>
-                {/*  login Button */}
-                <a href='/api/auth/login'>
-                  <Button color='red' appearance='ghost'>
-                    Red
+        <Row>
+          <Col xs={6} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+            <Sidenav style={{ height: "100%" }}>
+              <Sidenav.Body style={{ height: "100%" }}>
+                <Nav style={{ textAlign: "center" }}>
+                  {/*  login Button */}
+                  {userData.user ? (
+                    <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
+                      <a href='/api/auth/logout' style={{ color: "inherit" }}>
+                        logout
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
+                      <a href='/api/auth/login' style={{ color: "inherit" }}>
+                        login
+                      </a>
+                    </Button>
+                  )}
+
+                  <Button appearance='subtle' block>
+                    Politics
                   </Button>
-                </a>
-                <Button appearance='subtle' block>
-                  Politics
-                </Button>
-                <Button appearance='subtle' block>
-                  Finance
-                </Button>
-                <Button appearance='subtle' block>
-                  Business
-                </Button>
-                <Button appearance='subtle' block>
-                  Academia
-                </Button>
-                <Button appearance='subtle' block>
-                  Journalists
-                </Button>
-                <Button appearance='subtle' block>
-                  Non-profits
-                </Button>
-              </Nav>
-            </Sidenav.Body>
-          </Sidenav>
-        </Sidebar>
-        <Content>
-          <Grid fluid>
-            <Row>
+                  <Button appearance='subtle' block>
+                    Finance
+                  </Button>
+                  <Button appearance='subtle' block>
+                    Business
+                  </Button>
+                  <Button appearance='subtle' block>
+                    Academia
+                  </Button>
+                  <Button appearance='subtle' block>
+                    Journalists
+                  </Button>
+                  <Button appearance='subtle' block>
+                    Non-profits
+                  </Button>
+                </Nav>
+              </Sidenav.Body>
+            </Sidenav>
+          </Col>
+          <Col xs={12}>
+            <Grid fluid>
               <Row>
-                <Col xsOffset={2} xs={20}>
-                  <Panel
-                    className={styles.panel}
-                    bordered
-                    header={
-                      <Stack justifyContent='space-between'>
-                        <span>FIrst post</span>
-                      </Stack>
-                    }
-                  >
-                    <Placeholder.Paragraph rows={5} graph='image' />
-                  </Panel>
-                </Col>
+                <Row>
+                  <Col xsOffset={2} xs={20}>
+                    <Panel
+                      className={styles.panel}
+                      bordered
+                      header={
+                        <Stack justifyContent='space-between'>
+                          <span>FIrst post</span>
+                        </Stack>
+                      }
+                    >
+                      <Placeholder.Paragraph rows={5} graph='image' />
+                    </Panel>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col xsOffset={2} xs={20}>
+                    <Panel
+                      className={styles.panel}
+                      bordered
+                      header={
+                        <Stack justifyContent='space-between'>
+                          <span>FIrst post</span>
+                        </Stack>
+                      }
+                    >
+                      <Placeholder.Paragraph rows={5} graph='image' />
+                    </Panel>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col xsOffset={2} xs={20}>
+                    <Panel
+                      className={styles.panel}
+                      bordered
+                      header={
+                        <Stack justifyContent='space-between'>
+                          <span>FIrst post</span>
+                        </Stack>
+                      }
+                    >
+                      <Placeholder.Paragraph rows={5} graph='image' />
+                    </Panel>
+                  </Col>
+                </Row>
+                <br />
               </Row>
-              <br />
-              <Row>
-                <Col xsOffset={2} xs={20}>
-                  <Panel
-                    className={styles.panel}
-                    bordered
-                    header={
-                      <Stack justifyContent='space-between'>
-                        <span>FIrst post</span>
-                      </Stack>
-                    }
-                  >
-                    <Placeholder.Paragraph rows={5} graph='image' />
-                  </Panel>
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <Col xsOffset={2} xs={20}>
-                  <Panel
-                    className={styles.panel}
-                    bordered
-                    header={
-                      <Stack justifyContent='space-between'>
-                        <span>FIrst post</span>
-                      </Stack>
-                    }
-                  >
-                    <Placeholder.Paragraph rows={5} graph='image' />
-                  </Panel>
-                </Col>
-              </Row>
-              <br />
-            </Row>
-          </Grid>
-        </Content>
-        <Sidebar style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-          <Sidenav>
-            <Sidenav.Header>Dashboard</Sidenav.Header>
-            <Sidenav.Body>c</Sidenav.Body>
-          </Sidenav>
-        </Sidebar>
+            </Grid>
+          </Col>
+          <Col xs={6} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+            <Sidenav>
+              <Sidenav.Header>Dashboard</Sidenav.Header>
+              <Sidenav.Body>
+                <br /> 
+                <Button color='blue' appearance='ghost' style={{ margin: "auto" }}>
+                  <a href='/profile/1' style={{ color: "inherit" }}>
+                    Profile
+                  </a>
+                </Button>
+              </Sidenav.Body>
+            </Sidenav>
+          </Col>
+        </Row>
       </Container>
       <Footer>
         <p>© 2023 My Platform</p>
