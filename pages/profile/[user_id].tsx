@@ -1,33 +1,29 @@
 import { Container, Sidenav, Nav, Button, Header, Content, Footer, Row, Col, Panel, Placeholder, Tag } from "rsuite";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import Head from "next/head";
+import Head from "next/document";
 import "rsuite/dist/rsuite.min.css";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
-const UserProfile = () => {
-  const userData = useUser();
-  console.log(userData);
-  // console.log(userData.user?.email);
-  // console.log(userData.user);
-  // console.log(userData.user);
+const supabaseClient = createBrowserSupabaseClient();
 
+const UserProfile = (props) => {
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+  const [data, setData] = useState();
+
+  // useEffect(() => {
+  async function loadData() {
+    // const { data } = await supabaseClient.from("public_figures").select("*");
+    //console.log({ data });
+    // setData(data);
+  }
+
+  // console.log(props);
   return (
     <Container>
-      <Head>
-        <link
-          href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-          rel='stylesheet'
-          integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-          crossOrigin='anonymous'
-        />
-      </Head>
-      <Head>
-        <link
-          href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-          rel='stylesheet'
-          integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-          crossOrigin='anonymous'
-        />
-      </Head>
       <Header>
         <h2>User Profile</h2>
       </Header>
@@ -40,27 +36,14 @@ const UserProfile = () => {
                   {/* home button  */}
                   <br />
                   <br />
-                  <a href='/' style={{ color: "inherit" }}>
+                  <Link href='/' style={{ color: "inherit" }}>
                     <Button color='green' appearance='ghost' style={{ margin: "auto" }}>
                       home
                     </Button>
-                  </a>
+                  </Link>
                   <br />
                   <br />
-                  {/* login/logout button  */}
-                  {userData.user ? (
-                    <a href='/api/auth/logout' style={{ color: "inherit" }}>
-                      <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
-                        logout
-                      </Button>
-                    </a>
-                  ) : (
-                    <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
-                      <a href='/api/auth/login' style={{ color: "inherit" }}>
-                        login
-                      </a>
-                    </Button>
-                  )}
+
                   <hr />
                   <Button appearance='subtle' block>
                     Politics
@@ -84,7 +67,21 @@ const UserProfile = () => {
               </Sidenav.Body>
             </Sidenav>
           </Col>
-          <Col xs={15}></Col>
+          <Col xs={15}>
+            {/* {			
+ 		 				!user : (return <Auth redirectTo='http://localhost:3000/' supabaseClient={supabaseClient} providers={["google", "github"]} socialLayout='horizontal' />)
+			} */}
+            <>
+              <Button color='red' appearance='primary' onClick={() => supabaseClient.auth.signOut()}>
+                Sign out
+              </Button>
+
+              <p>user:</p>
+              <pre>{JSON.stringify(user, null, 2)}</pre>
+              <p>client-side data fetching with RLS</p>
+              <pre>{JSON.stringify(data, null, 2)}</pre>
+            </>
+          </Col>
           {/* <Col xs={6} style={{ height: "100%", display: "flex", flexDirection: "column" }}></Col> */}
         </Row>
       </Content>
@@ -94,5 +91,47 @@ const UserProfile = () => {
     </Container>
   );
 };
+export const getServerSideProps = async (ctx) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+
+  const specificUUID = "cb131d30-8434-40c1-b894-4ea341d9d2a4";
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const user_uuid = user.id;
+
+
+  try {
+    const user_data = await supabaseClient.from("users").select("id");
+
+  } catch (e) {
+    if (e.error.message) {
+    
+    }
+  }
+
+  return {
+    props: {
+      initialSession: session,
+      user: user,
+    },
+  };
+};
 export default UserProfile;

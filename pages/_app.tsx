@@ -1,10 +1,15 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
-import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { useState } from "react";
+import "rsuite/dist/rsuite.min.css";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return (    
-		<UserProvider>
-			<Component {...pageProps} /> 
-		</UserProvider>)
+export default function MyApp({ Component, pageProps }) {
+  // Create a new supabase browser client on every first render.
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
+  return (
+    <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
+      <Component {...pageProps} />
+    </SessionContextProvider>
+  );
 }

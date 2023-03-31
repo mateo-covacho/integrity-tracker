@@ -1,4 +1,4 @@
-import Head from "next/head";
+import { Head } from "next/document";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
@@ -21,31 +21,22 @@ import {
   Tag,
   TagGroup,
 } from "rsuite";
-import "rsuite/dist/rsuite.min.css";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+
+const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Home = () => {
-  const userData = useUser();
-  console.log(userData.user);
+const Home = (props) => {
+  // const userData = useUser();
+  // console.log(props);
   return (
     <Container style={{ height: "100vh" }}>
-      <Head>
-        <link
-          href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-          rel='stylesheet'
-          integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-          crossOrigin='anonymous'
-        />
-      </Head>
-
       <Header>
         <Nav>
           <Nav.Item>Home</Nav.Item>
           <Nav.Item>About</Nav.Item>
-          <Nav.Item>Blog</Nav.Item>
-          <Nav.Item>Contact</Nav.Item>
+          <Nav.Item>People</Nav.Item>
         </Nav>
       </Header>
       <Container style={{ height: "100%" }}>
@@ -55,19 +46,19 @@ const Home = () => {
               <Sidenav.Body style={{ height: "100%" }}>
                 <Nav style={{ textAlign: "center" }}>
                   {/*  login Button */}
-                  {userData.user ? (
+                  {/* {userData.user ? (
                     <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
                       <a href='/api/auth/logout' style={{ color: "inherit" }}>
                         logout
                       </a>
                     </Button>
                   ) : (
-                    <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
-                      <a href='/api/auth/login' style={{ color: "inherit" }}>
-                        login
-                      </a>
-                    </Button>
-                  )}
+                  <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
+                    <a href='/api/auth/login' style={{ color: "inherit" }}>
+                      login
+                    </a>
+                  </Button>
+                   )} */}
 
                   <Button appearance='subtle' block>
                     Politics
@@ -149,12 +140,12 @@ const Home = () => {
             <Sidenav>
               <Sidenav.Header>Dashboard</Sidenav.Header>
               <Sidenav.Body>
-                <br /> 
-                <Button color='blue' appearance='ghost' style={{ margin: "auto" }}>
-                  <a href='/profile/1' style={{ color: "inherit" }}>
+                <br />
+                <a href='/profile/1' style={{ color: "inherit" }}>
+                  <Button color='blue' appearance='ghost' style={{ margin: "auto" }}>
                     Profile
-                  </a>
-                </Button>
+                  </Button>
+                </a>
               </Sidenav.Body>
             </Sidenav>
           </Col>
@@ -165,6 +156,37 @@ const Home = () => {
       </Footer>
     </Container>
   );
+};
+
+export const getServerSideProps = async (ctx) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const getUserData = await supabase.auth.getUser();
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  // const { data } = await supabaseClient.from("public_figures").select("*");
+
+  // console.log(data);
+
+  return {
+    props: {
+      initialSession: session,
+
+      UserData: getUserData.data.user,
+    },
+  };
 };
 
 export default Home;
