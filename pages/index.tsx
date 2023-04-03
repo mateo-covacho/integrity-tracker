@@ -22,14 +22,15 @@ import {
   TagGroup,
 } from "rsuite";
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 
 const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Home = (props) => {
-  // const userData = useUser();
-  // console.log(props);
+  const userData = useUser();
+  console.log(userData);
   return (
     <Container style={{ height: "100vh" }}>
       <Header>
@@ -141,7 +142,8 @@ const Home = (props) => {
               <Sidenav.Header>Dashboard</Sidenav.Header>
               <Sidenav.Body>
                 <br />
-                <a href='/profile/1' style={{ color: "inherit" }}>
+
+                <a href={`/profile/${userData?.id}`} style={{ color: "inherit" }}>
                   <Button color='blue' appearance='ghost' style={{ margin: "auto" }}>
                     Profile
                   </Button>

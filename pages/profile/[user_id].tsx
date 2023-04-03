@@ -6,12 +6,31 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { differenceInSeconds } from "date-fns";
 
 const supabaseClient = createBrowserSupabaseClient();
+
+async function create_user(uuid: string) {
+  console.log("create_user");
+  // @ts-ignore
+  const res = await fetch(
+    "http://localhost:3000/api/hello"
+    // {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ uuid: uuid }),
+    // }
+  );
+  const data = await res.json();
+  console.log(data);
+}
 
 const UserProfile = (props) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+
   const [data, setData] = useState();
 
   // useEffect(() => {
@@ -19,6 +38,11 @@ const UserProfile = (props) => {
     // const { data } = await supabaseClient.from("public_figures").select("*");
     //console.log({ data });
     // setData(data);
+  }
+
+  function isoToUnixTime(isoString: string) {
+    const unixTime = Date.parse(isoString) / 1000; // Convert to Unix time (in seconds)
+    return unixTime;
   }
 
   // console.log(props);
@@ -77,7 +101,7 @@ const UserProfile = (props) => {
               </Button>
 
               <p>user:</p>
-              <pre>{JSON.stringify(user, null, 2)}</pre>
+              <pre>{JSON.stringify(props.user, null, 2)}</pre>
               <p>client-side data fetching with RLS</p>
               <pre>{JSON.stringify(data, null, 2)}</pre>
             </>
@@ -91,7 +115,7 @@ const UserProfile = (props) => {
     </Container>
   );
 };
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
   // Check if we have a session
@@ -99,6 +123,7 @@ export const getServerSideProps = async (ctx) => {
     data: { session },
   } = await supabase.auth.getSession();
 
+  console.log(ctx.url);
   if (!session) {
     return {
       redirect: {
@@ -108,23 +133,22 @@ export const getServerSideProps = async (ctx) => {
     };
   }
 
-
-  const specificUUID = "cb131d30-8434-40c1-b894-4ea341d9d2a4";
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const user_uuid = user.id;
+  //console.log(user);
 
+  const user_uuid = user!.id;
 
-  try {
-    const user_data = await supabaseClient.from("users").select("id");
+  // console.log(user_uuid);
 
-  } catch (e) {
-    if (e.error.message) {
-    
-    }
+  const user_data = await supabaseClient.from("users").select("id").eq("id", user_uuid);
+  console.log(user_data);
+  if (user_data.error === null) {
+    //create user table
+    // @ts-ignore
+    // create_user(user_uuid);
   }
 
   return {
