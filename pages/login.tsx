@@ -22,7 +22,7 @@ import {
   TagGroup,
 } from "rsuite";
 import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { ThemeSupa, ThemeMinimal } from "@supabase/auth-ui-shared";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -44,6 +44,18 @@ function SignIn() {
   //   if (user) loadData();
   // }, [user]);
 
+  useEffect(() => {
+    const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session.user.newUser) {
+        router.push("/create_username");
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
   if (user) {
     router.push("/");
   }
@@ -54,10 +66,10 @@ function SignIn() {
     return (
       <Container>
         <Row>
-          <Col xs={12}>
+          <Col xsOffset={6} xs={12}>
             <Auth
-              appearance={{ theme: ThemeSupa }}
-              redirectTo='http://localhost:3000/'
+              appearance={{ theme: ThemeMinimal }}
+              redirectTo='http://localhost:3000/create_username'
               supabaseClient={supabaseClient}
               providers={["google"]}
               socialLayout='horizontal'

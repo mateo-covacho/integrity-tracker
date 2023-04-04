@@ -25,5 +25,8 @@
     "react-dom": "18.2.0",
     "rsuite": "^5.29.0",
     "typescript": "5.0.2"
+  },
+  "devDependencies": {
+    "supabase": "^1.47.2"
   }
 }

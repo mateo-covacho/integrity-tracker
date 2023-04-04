@@ -1,37 +1,25 @@
 import { Container, Sidenav, Nav, Button, Header, Content, Footer, Row, Col, Panel, Placeholder, Tag } from "rsuite";
-import Head from "next/document";
 import "rsuite/dist/rsuite.min.css";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { differenceInSeconds } from "date-fns";
-
+import { id } from "date-fns/locale";
+import Head from "next/document";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { create_user } from "@/utils/create_user";
 const supabaseClient = createBrowserSupabaseClient();
 
-async function create_user(uuid: string) {
-  console.log("create_user");
-  // @ts-ignore
-  const res = await fetch(
-    "http://localhost:3000/api/hello"
-    // {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ uuid: uuid }),
-    // }
-  );
-  const data = await res.json();
-  console.log(data);
-}
-
-const UserProfile = (props) => {
+const UserProfile = (props: any) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+  const router = useRouter();
 
   const [data, setData] = useState();
+
+  // console.log(props);
 
   // useEffect(() => {
   async function loadData() {
@@ -44,6 +32,12 @@ const UserProfile = (props) => {
     const unixTime = Date.parse(isoString) / 1000; // Convert to Unix time (in seconds)
     return unixTime;
   }
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user]);
 
   // console.log(props);
   return (
@@ -115,6 +109,7 @@ const UserProfile = (props) => {
     </Container>
   );
 };
+
 export const getServerSideProps = async (ctx: any) => {
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
@@ -123,7 +118,6 @@ export const getServerSideProps = async (ctx: any) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log(ctx.url);
   if (!session) {
     return {
       redirect: {
@@ -139,12 +133,12 @@ export const getServerSideProps = async (ctx: any) => {
 
   //console.log(user);
 
-  const user_uuid = user!.id;
+  const user_uuid = ctx.params.user_id;
 
   // console.log(user_uuid);
 
   const user_data = await supabaseClient.from("users").select("id").eq("id", user_uuid);
-  console.log(user_data);
+  // console.log(user_data);
   if (user_data.error === null) {
     //create user table
     // @ts-ignore
@@ -154,7 +148,7 @@ export const getServerSideProps = async (ctx: any) => {
   return {
     props: {
       initialSession: session,
-      user: user,
+      user: user, // get_user() data
     },
   };
 };

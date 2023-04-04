@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
+import { print } from "@/utils/print";
 import { differenceInSeconds } from "date-fns";
 
 type Data = {
@@ -8,37 +9,28 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  console.log(req.body);
-  // const supabase = createServerSupabaseClient(ctx);
-  // // Check if we have a session
+  print("green", "Creating user ... ");
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  print("yellow", "\t creating client ...");
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
+  print("green", "\t client created \n");
 
-  // //console.log(user);
+  const { user_uuid, username, email, profile_pic, bio, tags, joined } = req.query;
 
-  // const user_uuid = user!.id;
+  //create user table
 
-  // // console.log(user_uuid);
+  print("yellow", "\t creating user ...");
+  //const { data, error } = await supabase.from("users").insert({
+  const response = await supabase.from("users").insert({
+    id: user_uuid,
+    username: username,
+    email: email,
+    profile_pic: profile_pic,
+    bio: bio,
+    tags: tags,
+    joined: joined,
+  });
+  print("green", response);
 
-  // //create user table
-
-  // const { data, error } = await supabase.from("users").insert({
-  //   id: user_uuid,
-  //   username: user?.user_metadata.name,
-  //   email: user?.user_metadata.email,
-  //   profile_pic: user?.user_metadata.avatar_url,
-  //   bio: "bio",
-  //   followers: null,
-  //   following: null,
-  //   posts: null,
-  //   likes: null,
-  //   dislikes: null,
-  //   comments: null,
-  //   tags: "new user",
-  //   updated_at: user?.updated_at,
-  //   created_at: user?.created_at,
-  // });
   res.status(200).json({ name: "John Doe" });
 }

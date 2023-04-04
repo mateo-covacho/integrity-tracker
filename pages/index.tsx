@@ -30,7 +30,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 const Home = (props) => {
   const userData = useUser();
-  console.log(userData);
+  // console.log(userData);
+
+  // console.log(props.public_figures);
+
   return (
     <Container style={{ height: "100vh" }}>
       <Header>
@@ -178,14 +181,12 @@ export const getServerSideProps = async (ctx) => {
     };
   }
 
-  // const { data } = await supabaseClient.from("public_figures").select("*");
-
-  // console.log(data);
+  // const { public_figures } = await supabaseClient.from("public_figures").select("*");
 
   return {
     props: {
       initialSession: session,
-
+      // public_figures: public_figures,
       UserData: getUserData.data.user,
     },
   };
