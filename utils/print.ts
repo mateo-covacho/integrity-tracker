@@ -1,5 +1,4 @@
 export function print(color: any, text: any) {
-  console.clear();
   const colors = {
     black: "\x1b[30m",
     red: "\x1b[31m",

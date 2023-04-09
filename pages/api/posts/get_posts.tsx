@@ -9,31 +9,25 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  print("blue", "/api/users/create_user.ts");
+  print("blue", "/api/posts/get_posts.ts");
 
   print("yellow", "\t creating client ...");
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
   print("green", "\t client created \n");
 
-  const { user_uuid, username, email, profile_pic, bio, tags, joined } = req.body;
+  const { post_uuid, author_uuid, figure_uuid } = req.body;
 
-  print("yellow", `\t ${user_uuid}, ${username}, ${email}, ${profile_pic}, ${bio}, ${tags}, ${joined}`);
+  console.log(req);
+  console.log("post_uuid", post_uuid);
+  console.log("author_uuid", author_uuid);
+  console.log("figure_uuid", figure_uuid);
+
   //create user table
 
-  print("yellow", "\t creating user ...");
-  //const { data, error } = await supabase.from("users").insert({
-  const response = await supabase.from("users").insert({
-    id: user_uuid,
-    username: username,
-    email: email,
-    profile_pic: profile_pic,
-    bio: bio,
-    tags: tags,
-    joined: joined,
-  });
-  print("green", response);
+  print("yellow", "\t getting posts ...");
+  // const { data: posts, error: postsError } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
 
   print("blue", "_________________________________________________________");
 
-  res.status(200).json(response as any);
+  res.status(200).json({ name: "fsdfsdf" });
 }

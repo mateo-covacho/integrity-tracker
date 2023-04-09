@@ -23,6 +23,7 @@ import {
 } from "rsuite";
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
+import Link from "next/link";
 
 const supabaseClient = createBrowserSupabaseClient();
 
@@ -146,11 +147,11 @@ const Home = (props) => {
               <Sidenav.Body>
                 <br />
 
-                <a href={`/profile/${userData?.id}`} style={{ color: "inherit" }}>
+                <Link href={`/profile/${userData?.id}`} style={{ color: "inherit" }}>
                   <Button color='blue' appearance='ghost' style={{ margin: "auto" }}>
                     Profile
                   </Button>
-                </a>
+                </Link>
               </Sidenav.Body>
             </Sidenav>
           </Col>

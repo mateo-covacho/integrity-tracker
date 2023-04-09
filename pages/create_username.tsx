@@ -97,13 +97,24 @@ function Create_username(props) {
                       body: JSON.stringify({
                         user_uuid: user?.id,
                         username: username,
-                        email: props.user.email,
+                        email: user?.email,
                         profile_pic: user?.user_metadata.avatar_url,
                         bio: "Hi there! I'm new to this app",
-                        tags: "new user",
+                        tags: ["new user"],
                         joined: new Date().toDateString(),
                       }),
-                    });
+                    })
+                      .then((res) => res.json())
+                      .then((res) => {
+                        return res;
+                      });
+                    print("green", response);
+                    if (response.statusText === "Created") {
+                      router.push("/");
+                    } else {
+											alert("Something went wrong. check console for more info")
+											print("red", response);
+										}
                   } else {
                     alert("Username is already taken");
                   }
@@ -138,7 +149,7 @@ export const getServerSideProps = async (ctx) => {
 
   // Check if user has a table entry
   const has_table_entry = await fetch(`http://localhost:3000/api/users/usertable_exists?uuid=${session.user.id}`, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },

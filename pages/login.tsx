@@ -27,6 +27,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import "rsuite/dist/rsuite.min.css";
+import { print } from "@/utils/print";
 
 function SignIn() {
   const supabaseClient = useSupabaseClient();
@@ -44,20 +45,8 @@ function SignIn() {
   //   if (user) loadData();
   // }, [user]);
 
-  useEffect(() => {
-    const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session.user.newUser) {
-        router.push("/create_username");
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [router]);
-
   if (user) {
-    router.push("/");
+    router.push("/create_username");
   }
   // useEffect(() => {}, [user, router]);
 
@@ -81,27 +70,52 @@ function SignIn() {
 
   return (
     <>
-      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
-      <p>user:</p>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      <p>client-side data fetching with RLS</p>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>Logged in</h1>
     </>
   );
 }
 
 export const getServerSideProps = async (ctx) => {
+  print("blue", "/login:getServerSideProps");
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
   // Check if we have a session
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  print("orange", `user id: ${user?.id}`);
+  // Check if user has a table entry
+  const has_table_entry = await fetch(`http://localhost:3000/api/users/usertable_exists?uuid=${user?.id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      return res.exists;
+    });
+
+  print("orange", `${user?.id} has table entry: ${has_table_entry}`);
   // console.log(session);
-  if (session) {
+  print("blue", "_________________________________________________________");
+
+  if (session && !has_table_entry) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/create_username",
+        permanent: false,
+      },
+    };
+  } else if (has_table_entry && session) {
+    return {
+      redirect: {
+        destination: "/ ",
         permanent: false,
       },
     };
