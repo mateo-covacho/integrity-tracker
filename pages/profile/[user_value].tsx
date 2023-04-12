@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { differenceInSeconds } from "date-fns";
 import { id } from "date-fns/locale";
-import Head from "next/document";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { print } from "@/utils/print";

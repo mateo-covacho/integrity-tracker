@@ -1,7 +1,6 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Head from "next/document";
 import {
   Button,
   Container,
