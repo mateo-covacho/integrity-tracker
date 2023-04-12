@@ -98,7 +98,7 @@ const UserProfile = (props: any) => {
                 <h2 style={{ marginBottom: "10px" }}>{user_profile.username}</h2>
                 <p style={{ marginBottom: "10px" }}>{user_profile.bio}</p>
                 <div style={{ marginBottom: "10px" }}>
-                  {user_profile.tags.map((tag) => (
+                  {user_profile.tags.map((tag: any) => (
                     <Tag color='cyan' key={tag}>
                       {tag}
                     </Tag>
@@ -113,6 +113,7 @@ const UserProfile = (props: any) => {
               {posts.map((post) => (
                 <List.Item key={post.id}>
                   <div style={{ display: "flex", alignItems: "center" }}>
+                    {/* @ts-ignore */}
                     <Avatar size='sm' src={post.author.profile_pic} style={{ marginRight: "10px" }} />
                     <div>
                       <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
@@ -145,7 +146,7 @@ const UserProfile = (props: any) => {
 export const getServerSideProps = async (ctx: any) => {
   print("blue", "/profile/[user_value].tsx:getServerSideProps");
   // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
+  const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
   const {
     data: { session },
@@ -178,7 +179,7 @@ export const getServerSideProps = async (ctx: any) => {
     // create_user(user_uuid);
   }
 
-  const profile_data = async function load_profile_data(value) {
+  const profile_data = async function load_profile_data(value: string) {
     if (uuidRegex.test(value)) {
       print("yellow", "uuid profile search");
       const { data, error } = await supabase.from("users").select("*").eq("id", value);

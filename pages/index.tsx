@@ -28,7 +28,7 @@ const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Home = (props) => {
+const Home = (props:any ) => {
   const userData = useUser();
   // console.log(userData);
 
@@ -163,9 +163,9 @@ const Home = (props) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx:object) => {
   // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
+  const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
   const {
     data: { session },

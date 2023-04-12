@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -28,7 +27,7 @@ import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supaba
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 
-function Create_username(props) {
+function Create_username(props: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const [username, setUsername] = useState();
@@ -57,6 +56,7 @@ function Create_username(props) {
               placeholder='username'
               value={username}
               onChange={(value: string) => {
+                // @ts-ignore
                 setUsername(value);
               }}
             />
@@ -67,6 +67,7 @@ function Create_username(props) {
               onClick={async () => {
                 if (!username) {
                   alert("Please enter a username");
+                  // @ts-ignore
                 } else if (username.length < 3) {
                   alert("Username must be at least 3 characters long");
                 } else {
@@ -111,9 +112,9 @@ function Create_username(props) {
                     if (response.statusText === "Created") {
                       router.push("/");
                     } else {
-											alert("Something went wrong. check console for more info")
-											print("red", response);
-										}
+                      alert("Something went wrong. check console for more info");
+                      print("red", response);
+                    }
                   } else {
                     alert("Username is already taken");
                   }
@@ -129,9 +130,10 @@ function Create_username(props) {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: object) => {
   // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
+
+  const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
   const {
     data: { session },

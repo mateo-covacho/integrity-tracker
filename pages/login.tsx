@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -74,10 +73,10 @@ function SignIn() {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: object) => {
   print("blue", "/login:getServerSideProps");
   // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
+  const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
   const {
     data: { session },

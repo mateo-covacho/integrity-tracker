@@ -24,8 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   print("orange", `\t checking username: ${username}`);
   const { data, error } = await supabase.from("users").select("username").eq("username", username);
 
-  const username_valid = data.length === 0 ? true : false;
+  const username_valid = data?.length === 0 ? true : false;
   print("green", `\t username valid: ${username_valid}`);
-
+  //	@ts-ignore
   res.status(200).json({ valid: username_valid });
 }

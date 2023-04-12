@@ -35,6 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   print("green", `\t Has table: ${table_exists}`);
 
   print("blue", "_________________________________________________________");
-
+  //	@ts-ignore
   res.status(200).json({ exists: table_exists });
 }
