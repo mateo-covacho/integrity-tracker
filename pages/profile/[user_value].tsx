@@ -32,7 +32,7 @@ const UserProfile = (props: any) => {
   // useEffect(() => {
 
   useEffect(() => {
-    if (!props.data[0]) {
+    if (!user) {
       router.push("/login");
     }
   }, [user]);
