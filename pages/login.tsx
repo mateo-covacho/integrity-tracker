@@ -56,7 +56,7 @@ function SignIn() {
           <Col xsOffset={6} xs={12}>
             <Auth
               appearance={{ theme: ThemeMinimal }}
-              redirectTo={`${process.env.root_link}create_username`}
+              redirectTo={`${process.env.root_link}/create_username`}
               supabaseClient={supabaseClient}
               providers={["google"]}
               socialLayout='horizontal'
@@ -89,7 +89,7 @@ export const getServerSideProps = async (ctx: object) => {
   print("orange", `user id: ${user?.id}`);
   // Check if user has a table entry
   // @ts-ignore
-  const has_table_entry = await fetch(`${process.env.root_link}api/users/usertable_exists?uuid=${user?.id}`, {
+  const has_table_entry = await fetch(`${process.env.root_link}/api/users/usertable_exists?uuid=${user?.id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
