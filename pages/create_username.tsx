@@ -149,7 +149,7 @@ export const getServerSideProps = async (ctx: object) => {
   }
 
   // Check if user has a table entry
-  const has_table_entry = await fetch(`${process.env.root_link}/api/users/usertable_exists?uuid=${session.user.id}`, {
+  const has_table_entry = await fetch(`/api/users/usertable_exists?uuid=${session.user.id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
