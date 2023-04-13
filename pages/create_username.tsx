@@ -73,7 +73,7 @@ function Create_username(props: any) {
                 } else {
                   // check if username is taken
                   print("green", `Checking if ${username} is taken...`);
-                  const valid_username = await fetch(`${process.env.ROOT_LINK}/api/users/username_check?username=${username}`, {
+                  const valid_username = await fetch(`${process.env.ROOT_LINK}api/users/username_check?username=${username}`, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
