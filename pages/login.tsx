@@ -88,6 +88,7 @@ export const getServerSideProps = async (ctx: object) => {
 
   print("orange", `user id: ${user?.id}`);
   // Check if user has a table entry
+  // @ts-ignore
   const has_table_entry = await fetch(`${process.env.root_link}api/users/usertable_exists?uuid=${user?.id}`, {
     method: "POST",
     headers: {
@@ -96,6 +97,7 @@ export const getServerSideProps = async (ctx: object) => {
   })
     .then((res) => res.json())
     .then((res) => {
+      // @ts-ignore
       return res.exists;
     });
 
