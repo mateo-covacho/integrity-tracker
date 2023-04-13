@@ -86,22 +86,24 @@ export const getServerSideProps = async (ctx: object) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  print("orange", `user id: ${user?.id}`);
-  // Check if user has a table entry
-  // @ts-ignore
-  const has_table_entry = await fetch(`${process.env.root_link}/api/users/usertable_exists?uuid=${user?.id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      // @ts-ignore
-      return res.exists;
-    });
+  if (user) {
+    print("orange", `user id: ${user?.id}`);
+    // Check if user has a table entry
+    // @ts-ignore
+    const has_table_entry = await fetch(`${process.env.root_link}/api/users/usertable_exists?uuid=${user?.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        // @ts-ignore
+        return res.exists;
+      });
+    print("orange", `${user?.id} has table entry: ${has_table_entry}`);
+  }
 
-  print("orange", `${user?.id} has table entry: ${has_table_entry}`);
   // console.log(session);
   print("blue", "_________________________________________________________");
 
