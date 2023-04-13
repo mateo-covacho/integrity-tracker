@@ -73,7 +73,7 @@ function Create_username(props: any) {
                 } else {
                   // check if username is taken
                   print("green", `Checking if ${username} is taken...`);
-                  const valid_username = await fetch(`${process.env.ROOT_LINK}/api/users/username_check?username=${username}`, {
+                  const valid_username = await fetch(`${process.env.root_link}api/users/username_check?username=${username}`, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
@@ -89,7 +89,7 @@ function Create_username(props: any) {
 
                   print("green", `Username valid: ${valid_username}`);
                   if (valid_username) {
-                    const response = await fetch(`${process.env.ROOT_LINK}/api/users/create_user`, {
+                    const response = await fetch(`${process.env.root_link}api/users/create_user`, {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
@@ -149,7 +149,7 @@ export const getServerSideProps = async (ctx: object) => {
   }
 
   // Check if user has a table entry
-  const has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${session.user.id}`, {
+  const has_table_entry = await fetch(`${process.env.root_link}api/users/usertable_exists?uuid=${session.user.id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
