@@ -86,13 +86,14 @@ export const getServerSideProps = async (ctx: object) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-	let has_table_entry = false;
+  console.log(`${process.env.ROOT_LINK}/api`);
+  let has_table_entry = false;
   if (user) {
     print("orange", `user id: ${user?.id}`);
     // Check if user has a table entry
     // @ts-ignore
     has_table_entry = await fetch(`${process.env.root_link}/api/users/usertable_exists?uuid=${user?.id}`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
