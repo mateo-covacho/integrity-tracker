@@ -43,7 +43,10 @@ const UserProfile = (props: any) => {
 
   const user_profile = props.data[0];
 
-  return (
+	console.log(user_profile )
+
+
+ return (
     <Container>
       <Header>
         <h2>User Profile</h2>
@@ -193,9 +196,14 @@ export const getServerSideProps = async (ctx: any) => {
 
   const data = await profile_data(user_value);
   print("red", data);
+  
+	// get user posts
+	
+	 
+
   print("blue", "_________________________________________________________");
 
-  return {
+  return { 
     props: {
       data,
     },

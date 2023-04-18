@@ -28,11 +28,15 @@ const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Home = (props:any ) => {
+
+
+const Home = (props: any) => {
   const userData = useUser();
   // console.log(userData);
 
   // console.log(props.public_figures);
+
+
 
   return (
     <Container style={{ height: "100vh" }}>
@@ -50,19 +54,6 @@ const Home = (props:any ) => {
               <Sidenav.Body style={{ height: "100%" }}>
                 <Nav style={{ textAlign: "center" }}>
                   {/*  login Button */}
-                  {/* {userData.user ? (
-                    <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
-                      <a href='/api/auth/logout' style={{ color: "inherit" }}>
-                        logout
-                      </a>
-                    </Button>
-                  ) : (
-                  <Button color='red' appearance='ghost' style={{ margin: "auto" }}>
-                    <a href='/api/auth/login' style={{ color: "inherit" }}>
-                      login
-                    </a>
-                  </Button>
-                   )} */}
 
                   <Button appearance='subtle' block>
                     Politics
@@ -151,6 +142,36 @@ const Home = (props:any ) => {
                     Profile
                   </Button>
                 </Link>
+
+                <Button
+                  color='blue'
+                  appearance='ghost'
+                  style={{ margin: "auto" }}
+                  onClick={async () => {
+                    const posts = await fetch("/api/posts/get_posts", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        // post_uuid: null,
+                        // user_uuid: "f8686c99-f440-49b6-9334-5eda66cf562b",
+                        // figure_uuid: null
+                        post_uuid: null,
+                        figure_uuid: "9f0f4a66-c2ef-4cd3-8364-04de12b5b993",
+                        user_uuid: null,
+                      }),
+                    })
+                      .then((res) => res.json())
+                      .then((res) => {
+                        return res.posts;
+                      });
+									console.log(posts)
+										
+                  }}
+                >
+                  get posts
+                </Button>
               </Sidenav.Body>
             </Sidenav>
           </Col>
@@ -163,7 +184,7 @@ const Home = (props:any ) => {
   );
 };
 
-export const getServerSideProps = async (ctx:object) => {
+export const getServerSideProps = async (ctx: object) => {
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
