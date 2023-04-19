@@ -23,21 +23,27 @@ import {
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
 
-
-
 const Home = (props: any) => {
   const userData = useUser();
+  const router = useRouter();
+  const user = useUser();
   // console.log(userData);
 
   // console.log(props.public_figures);
-
-
-
+  useEffect(() => {
+    if (!user) {
+      console.log(user);
+      if (!user) {
+        router.push("/login");
+      }
+    }
+  }, [user]);
   return (
     <Container style={{ height: "100vh" }}>
       <Header>
@@ -142,16 +148,18 @@ const Home = (props: any) => {
                     Profile
                   </Button>
                 </Link>
-
+                <br />
+                <br />
                 <Button
                   color='blue'
                   appearance='ghost'
                   style={{ margin: "auto" }}
                   onClick={async () => {
-                    const posts = await fetch("/api/posts/get_posts", {
+                    const posts = await fetch("${process.env.ROOT_LINK}/api/posts/get_posts", {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
+                        Accept: "application/json",
                       },
                       body: JSON.stringify({
                         // post_uuid: null,
@@ -166,11 +174,15 @@ const Home = (props: any) => {
                       .then((res) => {
                         return res.posts;
                       });
-									console.log(posts)
-										
+                    console.log(posts);
                   }}
                 >
                   get posts
+                </Button>
+                <br />
+                <br />
+                <Button color='red' appearance='primary' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
+                  Sign out
                 </Button>
               </Sidenav.Body>
             </Sidenav>

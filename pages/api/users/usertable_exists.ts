@@ -15,14 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   print("yellow", "\t Checking usertable ... ");
 
   print("yellow", "\t\t creating client ...");
-  const supabase = createClient(process.env.NEXT_PUB IC_SUPABASE_URL as string, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
   print("green", "\t\t client created");
 
   const { uuid } = req.query;
   //	@ts-ignore
   print("yellow", `\t\t checking uuid: ${uuid} for user table ...`);
   const { data, error } = await supabase.from("users").select("id").eq("id", uuid);
- 
+
   let table_exists = false;
   //	@ts-ignore
   if (error) {

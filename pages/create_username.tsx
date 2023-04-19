@@ -33,7 +33,6 @@ function Create_username(props: any) {
   const [username, setUsername] = useState();
   const router = useRouter();
 
-  print("red", new Date("dd/mm/yyyy"));
   //console.log(props.user);
   // useEffect(() => {
   //   async function loadData() {
@@ -73,19 +72,16 @@ function Create_username(props: any) {
                 } else {
                   // check if username is taken
                   print("green", `Checking if ${username} is taken...`);
-                  const valid_username = await fetch(
-                    `https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api/users/username_check?username=${username}`,
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-												'Accept': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        username: username,
-                      }),
-                    }
-                  )
+                  const valid_username = await fetch(`${process.env.ROOT_LINK}/api/users/username_check?username=${username}`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Accept: "application/json",
+                    },
+                    body: JSON.stringify({
+                      username: username,
+                    }),
+                  })
                     .then((res) => res.json())
                     .then((res) => {
                       return res.valid;
@@ -93,25 +89,22 @@ function Create_username(props: any) {
 
                   print("green", `Username valid: ${valid_username}`);
                   if (valid_username) {
-                    const response = await fetch(
-                      `https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api/users/create_user`,
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-													'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          user_uuid: user?.id,
-                          username: username,
-                          email: user?.email,
-                          profile_pic: user?.user_metadata.avatar_url,
-                          bio: "Hi there! I'm new to this app",
-                          tags: ["new user"],
-                          joined: new Date().toDateString(),
-                        }),
-                      }
-                    )
+                    const response = await fetch(`${process.env.ROOT_LINK}/api/users/create_user`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                      },
+                      body: JSON.stringify({
+                        user_uuid: user?.id,
+                        username: username,
+                        email: user?.email,
+                        profile_pic: user?.user_metadata.avatar_url,
+                        bio: "Hi there! I'm new to this app",
+                        tags: ["new user"],
+                        joined: new Date().toDateString(),
+                      }),
+                    })
                       .then((res) => res.json())
                       .then((res) => {
                         return res;
@@ -155,23 +148,21 @@ export const getServerSideProps = async (ctx: object) => {
       },
     };
   }
-	let has_table_entry = false
+  let has_table_entry = false;
   // Check if user has a table entry
-  has_table_entry = await fetch(
-    `https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api/users/usertable_exists?uuid=${session.user.id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-				'Accept': 'application/json',
-
-		},
-    }
-  )
+  has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${session.user.id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
     .then((res) => res.json())
     .then((res) => {
-      return res.exists;
+      return res.exists == "True";
     });
+
+  print("green", `User has table entry: ${has_table_entry}`);
   if (has_table_entry) {
     return {
       redirect: {

@@ -46,6 +46,8 @@ function SignIn() {
   if (user) {
     router.push("/create_username");
   }
+
+
   // useEffect(() => {}, [user, router]);
 
   const handleAuth = async () => {};
@@ -86,22 +88,19 @@ export const getServerSideProps = async (ctx: object) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api`);  
+  console.log(`${process.env.ROOT_LINK}/api`);
   let has_table_entry = false;
   if (user) {
     print("orange", `user id: ${user?.id}`);
     // Check if user has a table entry
     // @ts-ignore
-    has_table_entry = await fetch(
-      `https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api/users/usertable_exists?uuid=${user?.id}`,
-      {
-        method: "GET",
-        headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-        },
-      }
-    )
+    has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${user?.id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         // @ts-ignore
