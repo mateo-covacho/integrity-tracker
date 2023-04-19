@@ -97,7 +97,8 @@ export const getServerSideProps = async (ctx: object) => {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
         },
       }
     )
@@ -122,7 +123,7 @@ export const getServerSideProps = async (ctx: object) => {
   } else if (has_table_entry && session) {
     return {
       redirect: {
-        destination: "/ ",
+        destination: "/",
         permanent: false,
       },
     };
@@ -130,7 +131,6 @@ export const getServerSideProps = async (ctx: object) => {
 
   return {
     props: {
-      initialSession: "session?",
       user: "session?.user?,",
     },
   };

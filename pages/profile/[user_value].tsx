@@ -29,24 +29,22 @@ const UserProfile = (props: any) => {
 
   const supabase = createBrowserSupabaseClient();
 
-  // useEffect(() => {
-
   useEffect(() => {
     if (!user) {
-      router.push("/login");
+      console.log(user);
+      if (!user) {
+        router.push("/login");
+      }
     }
   }, [user]);
 
   useEffect(() => {
-    console.log(props.data[0]);
-  });
+    console.log(props);
+  }, [props]);
 
   const user_profile = props.data[0];
 
-	console.log(user_profile )
-
-
- return (
+  return (
     <Container>
       <Header>
         <h2>User Profile</h2>
@@ -196,16 +194,18 @@ export const getServerSideProps = async (ctx: any) => {
 
   const data = await profile_data(user_value);
   print("red", data);
-  
-	// get user posts
-	
-	 
+
+  const id = data[0].id;
+  // get user posts
+  const posts = await supabase.from("posts").select("*").eq("user_id", id);
+  print("red", posts);
 
   print("blue", "_________________________________________________________");
 
-  return { 
+  return {
     props: {
       data,
+      posts,
     },
   };
 };

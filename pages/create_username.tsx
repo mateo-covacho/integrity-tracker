@@ -79,6 +79,7 @@ function Create_username(props: any) {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
+												'Accept': 'application/json',
                       },
                       body: JSON.stringify({
                         username: username,
@@ -98,6 +99,7 @@ function Create_username(props: any) {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
+													'Accept': 'application/json',
                         },
                         body: JSON.stringify({
                           user_uuid: user?.id,
@@ -153,15 +155,17 @@ export const getServerSideProps = async (ctx: object) => {
       },
     };
   }
-
+	let has_table_entry = false
   // Check if user has a table entry
-  const has_table_entry = await fetch(
+  has_table_entry = await fetch(
     `https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/api/users/usertable_exists?uuid=${session.user.id}`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-      },
+				'Accept': 'application/json',
+
+		},
     }
   )
     .then((res) => res.json())
