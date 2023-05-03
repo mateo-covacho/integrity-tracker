@@ -16,33 +16,24 @@ const UserProfile = (props: any) => {
   const user = useUser();
   const router = useRouter();
   const [data, setData] = useState();
-  const [posts, setPosts] = useState([
-    {
-      id: "1",
-      title: "Post 1",
-      content: "This is the content of post 1",
-      tags: ["tag1", "tag2"],
-      created: "2021-08-01",
-      author: "asdasda",
-    },
-  ]);
+  const [posts, setPosts] = useState(props.posts.data);
 
   const supabase = createBrowserSupabaseClient();
 
-  useEffect(() => {
-    if (!user) {
-      console.log(user);
-      if (!user) {
-        router.push("/login");
-      }
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     console.log(user);
+  //     if (!user) {
+  //       router.push("/login");
+  //     }
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     console.log(props);
   }, [props]);
 
-  const user_profile = props.data[0];
+  const user_profile = props.data[0]; 
 
   return (
     <Container>
@@ -111,28 +102,29 @@ const UserProfile = (props: any) => {
               </div>
             </div>
             <List>
-              {posts.map((post) => (
-                <List.Item key={post.id}>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {/* @ts-ignore */}
-                    <Avatar size='sm' src={post.author.profile_pic} style={{ marginRight: "10px" }} />
-                    <div>
-                      <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
-                      <p style={{ marginBottom: "0px" }}>{post.content}</p>
-                      <div>
-                        {post.tags.map((tag) => (
-                          <Tag color='cyan' key={tag} style={{ marginRight: "5px" }}>
-                            {tag}
-                          </Tag>
-                        ))}
-                      </div>
-                      <Timeline style={{ marginTop: "5px" }}>
-                        <Timeline.Item>{`Posted on ${post.created}`}</Timeline.Item>
-                      </Timeline>
-                    </div>
-                  </div>
-                </List.Item>
-              ))}
+						{posts && posts.length > 0 && posts.map((post) => (
+  <List.Item key={post.id}>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      {/* @ts-ignore */}
+      <Avatar size='sm' src={post.author.profile_pic ? post.author.profile_pic : "https://nmastrazbewertstibxe.supabase.co/storage/v1/object/sign/profilepics/unnamed.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9maWxlcGljcy91bm5hbWVkLmpwZyIsImlhdCI6MTY4MTk3OTEyOCwiZXhwIjoxNzEzNTE1MTI4fQ.iqOGDiVyDHB96vYK7DmeYMCiiM1nVJwFtO5hebg5SnM&t=2023-04-20T08%3A25%3A28.814Z"} style={{ marginRight: "10px" }} />
+      <div>
+        <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
+        <p style={{ marginBottom: "0px" }}>{post.content}</p>
+        <div>
+          {post.tags.map((tag) => (
+            <Tag color='cyan' key={tag} style={{ marginRight: "5px" }}>
+              {tag}
+            </Tag>
+          ))}
+        </div>
+        <Timeline style={{ marginTop: "5px" }}>
+          <Timeline.Item>{`Posted on ${post.created}`}</Timeline.Item>
+        </Timeline>
+      </div>
+    </div>
+  </List.Item>
+))}
+
             </List>
           </Col>
         </Row>

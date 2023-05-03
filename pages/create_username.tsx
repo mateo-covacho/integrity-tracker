@@ -89,7 +89,9 @@ function Create_username(props: any) {
 
                   print("green", `Username valid: ${valid_username}`);
                   if (valid_username) {
-                    const response = await fetch(`${process.env.ROOT_LINK}/api/users/create_user`, {
+									let response;
+  								try {
+                    response = await fetch(`${process.env.ROOT_LINK}/api/users/create_user`, {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
@@ -109,6 +111,9 @@ function Create_username(props: any) {
                       .then((res) => {
                         return res;
                       });
+										} catch (error) {
+											print("red", error);
+										}
                     print("green", response);
                     if (response.statusText === "Created") {
                       router.push("/");
@@ -149,18 +154,25 @@ export const getServerSideProps = async (ctx: object) => {
     };
   }
   let has_table_entry = false;
-  // Check if user has a table entry
-  has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${session.user.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return res.exists == "True";
-    });
+ 	//  Check if user has a table entry
+  try {
+    has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${session.user.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        return res.exists == "True";
+      });
+  } catch (error) {
+		print("red", "usertable exists error");
+		print("yellow", "response: ")
+		print("blue", has_table_entry)
+    print("red", error);
+  }
 
   print("green", `User has table entry: ${has_table_entry}`);
   if (has_table_entry) {
