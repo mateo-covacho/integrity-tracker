@@ -108,27 +108,19 @@ const UserProfile = (props: any) => {
                   <List.Item key={post.id}>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {/* @ts-ignore */}
-                      <Avatar
-                        size='sm'
-                        src={
-                          post.author.profile_pic
-                            ? post.author.profile_pic
-                            : "https://nmastrazbewertstibxe.supabase.co/storage/v1/object/sign/profilepics/unnamed.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9maWxlcGljcy91bm5hbWVkLmpwZyIsImlhdCI6MTY4MTk3OTEyOCwiZXhwIjoxNzEzNTE1MTI4fQ.iqOGDiVyDHB96vYK7DmeYMCiiM1nVJwFtO5hebg5SnM&t=2023-04-20T08%3A25%3A28.814Z"
-                        }
-                        style={{ marginRight: "10px" }}
-                      />
+                      {/* <Avatar size='sm' src={post.author.profile_pic} style={{ marginRight: "10px" }} /> */}
                       <div>
                         <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
                         <p style={{ marginBottom: "0px" }}>{post.content}</p>
                         <div>
-                          {post.tags.map((tag: any) => (
+                          {post.tags?.map((tag: any) => (
                             <Tag color='cyan' key={tag} style={{ marginRight: "5px" }}>
                               {tag}
                             </Tag>
                           ))}
                         </div>
                         <Timeline style={{ marginTop: "5px" }}>
-                          <Timeline.Item>{`Posted on ${post.created}`}</Timeline.Item>
+                          <Timeline.Item>{`Posted on ${post.created_at}`}</Timeline.Item>
                         </Timeline>
                       </div>
                     </div>
@@ -200,7 +192,7 @@ export const getServerSideProps = async (ctx: any) => {
   const id = data[0].id;
   // get user posts
   const posts = await supabase.from("posts").select("*").eq("user_id", id);
-  print("red", posts);
+  print("orange", JSON.stringify(posts, null, 2));
 
   print("blue", "_________________________________________________________");
 

@@ -1,7 +1,10 @@
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState } from "react";
-import "rsuite/dist/rsuite.min.css";
+import "../node_modules/normalize.css/normalize.css";
+import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+
 import type { ReactNode, ComponentType } from "react";
 
 //	@ts-ignore
