@@ -13,6 +13,8 @@ import { Card, Col, Container, Nav, Row } from "react-bootstrap";
 import styles from "@/styles/Home.module.css";
 // import "../styles/outline.css"
 
+const supabaseClient = createBrowserSupabaseClient();
+
 const inter = Inter({ subsets: ["latin"] });
 
 const Home = (props: any) => {
@@ -79,41 +81,34 @@ const Home = (props: any) => {
           <Col xs={3} className='text-end outline_right'>
             <h4>Categories</h4>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Politics
             </Button>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Finance
             </Button>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Business
             </Button>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Academia
             </Button>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Journalists
             </Button>
             <br />
-            <Button alignText='right' fill='true'>
+            <Button alignText='right' fill={true}>
               Non-profits
             </Button>
           </Col>
           <Col xs={6}>
             <Row>
               <Col xs={12}>
-                <Card
-                  className={styles.panel}
-                  header={
-                    <div justifyContent='space-between'>
-                      <span>First post</span>
-                    </div>
-                  }
-                ></Card>
+                <Card className={styles.panel}></Card>
               </Col>
             </Row>
             <Row>
@@ -121,7 +116,7 @@ const Home = (props: any) => {
             </Row>
           </Col>
           <Col xs={3} className='outline_left'>
-            <div id='hot-network-questions' class='module tex2jax_ignore'>
+            <div id='hot-network-questions' className='module tex2jax_ignore'>
               <h4>Hot Network Questions</h4>
               <ul>
                 <Callout title={"Public Figure's Climate Change Initiative Delivers Results"} intent={"success"}>

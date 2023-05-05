@@ -54,7 +54,7 @@ function SignIn() {
     return (
       <Container>
         <Row>
-          <Col offset={6} xs={12}>
+          <Col xsOffset={6} xs={12}>
             <Auth
               appearance={{ theme: ThemeMinimal }}
               redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
