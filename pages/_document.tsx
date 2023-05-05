@@ -11,13 +11,11 @@ export default function Document() {
           crossOrigin='anonymous'
         />
 
-        <script src='https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js' crossOrigin></script>
+        <script src='https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js' crossOrigin='anonymous' async></script>
 
-        <script src='https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js' crossOrigin></script>
+        <script src='https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js' crossOrigin='anonymous' async></script>
 
-        <script src='https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js' crossOrigin></script>
-
-        <script>var Alert = ReactBootstrap.Alert;</script>
+        <script src='https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js' crossOrigin='anonymous' async></script>
       </Head>
       <body>
         <Main />
