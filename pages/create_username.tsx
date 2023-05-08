@@ -27,6 +27,9 @@ import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supaba
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 
+import urljoin from 'url-join';
+import {url} from "../utils/url.ts"
+
 function Create_username(props: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
@@ -72,7 +75,9 @@ function Create_username(props: any) {
                 } else {
                   // check if username is taken
                   print("green", `Checking if ${username} is taken...`);
-                  const valid_username = await fetch(`${process.env.ROOT_LINK}/api/users/username_check?username=${username}`, {
+                  const endpointPath = `/api/users/username_check?username=${username}`;
+                  const apiUrl = urljoin(url, endpointPath);
+                  const valid_username = await fetch(apiUrl, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
@@ -91,7 +96,9 @@ function Create_username(props: any) {
                   if (valid_username) {
 									let response;
   								try {
-                    response = await fetch(`${process.env.ROOT_LINK}/api/users/create_user`, {
+                    const endpointPath = `/api/users/create_user`;
+                    const apiUrl = urljoin(url, endpointPath);
+                    response = await fetch(apiUrl, {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
@@ -156,7 +163,9 @@ export const getServerSideProps = async (ctx: object) => {
   let has_table_entry = false;
  	//  Check if user has a table entry
   try {
-    has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${session.user.id}`, {
+    const endpointPath = `/api/users/usertable_exists?uuid=${session.user.id}`;
+    const apiUrl = urljoin(url, endpointPath);
+    has_table_entry = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

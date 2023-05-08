@@ -26,6 +26,8 @@ import { useEffect, useState } from "react";
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
+// import urljoin from 'url-join';
+import {url} from "../utils/url.ts"
 
 function SignIn() {
   const supabaseClient = useSupabaseClient();
@@ -87,13 +89,16 @@ export const getServerSideProps = async (ctx: object) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(`${process.env.ROOT_LINK}/api`);
   let has_table_entry = false;
   if (user) {
     print("orange", `user id: ${user?.id}`);
     // Check if user has a table entry
     // @ts-ignore
-    has_table_entry = await fetch(`${process.env.ROOT_LINK}/api/users/usertable_exists?uuid=${user?.id}`, {
+		print("red", url )
+
+    // const endpointPath = `/api/users/usertable_exists?uuid=${user?.id}`;
+    // const apiUrl = urljoin(url, endpointPath);
+    has_table_entry = await fetch(url +`/api/users/usertable_exists?uuid=${user?.id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
