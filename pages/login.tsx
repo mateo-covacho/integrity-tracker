@@ -27,7 +27,7 @@ import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supaba
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 // import urljoin from 'url-join';
-import {url} from "../utils/url.ts"
+import {url} from "../utils/url"
 
 function SignIn() {
   const supabaseClient = useSupabaseClient();

@@ -10,9 +10,9 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { Button, Panel, ButtonGroup, Tag, Callout, Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from "@blueprintjs/core";
 import { Card, Col, Container, Nav, Row } from "react-bootstrap";
 import styles from "@/styles/Home.module.css";
-import urljoin from 'url-join';
-import {url} from "../utils/url.ts"
-// import "../styles/outline.css" 
+import urljoin from "url-join";
+import { url } from "../utils/url";
+// import "../styles/outline.css"
 
 const supabaseClient = createBrowserSupabaseClient();
 
@@ -39,17 +39,17 @@ const Home = (props: any) => {
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>Integrity tracker</NavbarHeading>
         </NavbarGroup>
-				<NavbarGroup align={Alignment.RIGHT}>
-
+        <NavbarGroup align={Alignment.RIGHT}>
           <Button
             color='blue'
-            className="ms-3"style={{ margin: "auto" }}
+            className='ms-3'
+            style={{ margin: "auto" }}
             onClick={async () => {
-              console.log(url)
-              const endpointPath = '/api/posts/get_posts';
+              console.log(url);
+              const endpointPath = "/api/posts/get_posts";
               const apiUrl = urljoin(url, endpointPath);
               console.log(apiUrl);
-              const posts = await fetch(apiUrl, { 
+              const posts = await fetch(apiUrl, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -73,17 +73,17 @@ const Home = (props: any) => {
           >
             Get posts
           </Button>
-          
-          <Link href={`/profile/${userData?.id}`} className="ms-3"style={{ color: "inherit" }}>
+
+          <Link href={`/profile/${userData?.id}`} className='ms-3' style={{ color: "inherit" }}>
             <Button color='blue' style={{ margin: "auto" }}>
               Profile
             </Button>
           </Link>
 
-          <Button color='red' onClick={() => supabaseClient.auth.signOut()} className="ms-3"style={{ margin: "auto" }} intent='danger'>
+          <Button color='red' onClick={() => supabaseClient.auth.signOut()} className='ms-3' style={{ margin: "auto" }} intent='danger'>
             Sign out
           </Button>
-				</NavbarGroup>
+        </NavbarGroup>
       </Navbar>
       <Container style={{ height: "100vh" }}>
         <Row>

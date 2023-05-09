@@ -27,8 +27,8 @@ import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supaba
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 
-import urljoin from 'url-join';
-import {url} from "../utils/url.ts"
+import urljoin from "url-join";
+import { url } from "../utils/url";
 
 function Create_username(props: any) {
   const supabaseClient = useSupabaseClient();
@@ -94,33 +94,33 @@ function Create_username(props: any) {
 
                   print("green", `Username valid: ${valid_username}`);
                   if (valid_username) {
-									let response;
-  								try {
-                    const endpointPath = `/api/users/create_user`;
-                    const apiUrl = urljoin(url, endpointPath);
-                    response = await fetch(apiUrl, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                      },
-                      body: JSON.stringify({
-                        user_uuid: user?.id,
-                        username: username,
-                        email: user?.email,
-                        profile_pic: user?.user_metadata.avatar_url,
-                        bio: "Hi there! I'm new to this app",
-                        tags: ["new user"],
-                        joined: new Date().toDateString(),
-                      }),
-                    })
-                      .then((res) => res.json())
-                      .then((res) => {
-                        return res;
-                      });
-										} catch (error) {
-											print("red", error);
-										}
+                    let response;
+                    try {
+                      const endpointPath = `/api/users/create_user`;
+                      const apiUrl = urljoin(url, endpointPath);
+                      response = await fetch(apiUrl, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Accept: "application/json",
+                        },
+                        body: JSON.stringify({
+                          user_uuid: user?.id,
+                          username: username,
+                          email: user?.email,
+                          profile_pic: user?.user_metadata.avatar_url,
+                          bio: "Hi there! I'm new to this app",
+                          tags: ["new user"],
+                          joined: new Date().toDateString(),
+                        }),
+                      })
+                        .then((res) => res.json())
+                        .then((res) => {
+                          return res;
+                        });
+                    } catch (error) {
+                      print("red", error);
+                    }
                     print("green", response);
                     if (response.statusText === "Created") {
                       router.push("/");
@@ -161,7 +161,7 @@ export const getServerSideProps = async (ctx: object) => {
     };
   }
   let has_table_entry = false;
- 	//  Check if user has a table entry
+  //  Check if user has a table entry
   try {
     const endpointPath = `/api/users/usertable_exists?uuid=${session.user.id}`;
     const apiUrl = urljoin(url, endpointPath);
@@ -177,9 +177,9 @@ export const getServerSideProps = async (ctx: object) => {
         return res.exists == "True";
       });
   } catch (error) {
-		print("red", "usertable exists error");
-		print("yellow", "response: ")
-		print("blue", has_table_entry)
+    print("red", "usertable exists error");
+    print("yellow", "response: ");
+    print("blue", has_table_entry);
     print("red", error);
   }
 
