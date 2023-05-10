@@ -37,8 +37,11 @@ const Home = (props: any) => {
     <>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <NavbarHeading>Integrity tracker</NavbarHeading>
+          <NavbarHeading style={{ height: "50%", width: "100%" }} className='my-auto'>
+            <img className='m-auto' style={{ maxWidth: "100%", maxHeight: "100%" }} src='../resources/logo2.png' alt='integrity tracker logo' />
+          </NavbarHeading>
         </NavbarGroup>
+
         <NavbarGroup align={Alignment.RIGHT}>
           <Button
             color='blue'

@@ -27,7 +27,7 @@ import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supaba
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 // import urljoin from 'url-join';
-import {url} from "../utils/url"
+import { url } from "../utils/url";
 
 function SignIn() {
   const supabaseClient = useSupabaseClient();
@@ -58,10 +58,10 @@ function SignIn() {
         <Row>
           <Col xsOffset={6} xs={12}>
             <Auth
-              appearance={{ theme: ThemeMinimal }}
+              appearance={{ theme: ThemeSupa }}
               redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
               supabaseClient={supabaseClient}
-              providers={["google"]}
+              providers={["google", "github"]}
               socialLayout='horizontal'
             />
           </Col>
@@ -94,11 +94,11 @@ export const getServerSideProps = async (ctx: object) => {
     print("orange", `user id: ${user?.id}`);
     // Check if user has a table entry
     // @ts-ignore
-		print("red", url )
+    print("red", url);
 
     // const endpointPath = `/api/users/usertable_exists?uuid=${user?.id}`;
     // const apiUrl = urljoin(url, endpointPath);
-    has_table_entry = await fetch(url +`/api/users/usertable_exists?uuid=${user?.id}`, {
+    has_table_entry = await fetch(url + `/api/users/usertable_exists?uuid=${user?.id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
