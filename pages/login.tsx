@@ -54,9 +54,10 @@ function SignIn() {
   const handleAuth = async () => {};
   if (!user)
     return (
-      <Container>
-        <Row>
+      <Container style={{ height: "100vh" }}>
+        <Row className='my-auto'>
           <Col xsOffset={6} xs={12}>
+            <img src='/resources/logo.png' alt='logo' style={{ width: "100%" }} />
             <Auth
               appearance={{ theme: ThemeSupa }}
               redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
