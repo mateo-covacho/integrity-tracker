@@ -1,5 +1,6 @@
-import { Container, Sidenav, Nav, Button, Header, Content, Footer, Row, Col, Panel, Timeline, Tag, Avatar, List } from "rsuite";
+import { Alignment, Button, Card, Menu, MenuItem, Navbar, NavbarGroup, NavbarHeading, Tag } from "@blueprintjs/core";
 import "rsuite/dist/rsuite.min.css";
+import { Col, Container, Row } from "react-bootstrap";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
@@ -36,104 +37,87 @@ const UserProfile = (props: any) => {
   const user_profile = props.data[0];
 
   return (
-    <Container>
-      <Header>
-        <h2>User Profile</h2>
-      </Header>
-      <Content>
-        <Row gutter={16}>
-          <Col xs={9} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-            <Sidenav style={{ height: "100%" }}>
-              <Sidenav.Body style={{ height: "100%" }}>
-                <Nav style={{ textAlign: "center" }}>
-                  {/* home button  */}
-                  <br />
-                  <br />
-                  <Button color='red' appearance='primary' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
-                    Sign out
-                  </Button>
-                  <Link href='/' style={{ color: "inherit" }}>
-                    <Button color='green' appearance='ghost' style={{ margin: "auto" }}>
-                      home
-                    </Button>
-                  </Link>
-                  <br />
-                  <br />
+    <>
+      <Navbar>
+        <NavbarGroup align={Alignment.LEFT}>
+          <NavbarHeading>User Profile</NavbarHeading>
+        </NavbarGroup>
+        <NavbarGroup align={Alignment.RIGHT}>
+          <Button intent='danger' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
+            Sign out
+          </Button>
+          <Link href='/' style={{ color: "inherit" }}>
+            <Button intent='none' style={{ margin: "auto" }}>
+              Home
+            </Button>
+          </Link>
+        </NavbarGroup>
+      </Navbar>
 
-                  <hr />
-                  <Button appearance='subtle' block>
-                    Politics
-                  </Button>
-                  <Button appearance='subtle' block>
-                    Finance
-                  </Button>
-                  <Button appearance='subtle' block>
-                    Business
-                  </Button>
-                  <Button appearance='subtle' block>
-                    Academia
-                  </Button>
-                  <Button appearance='subtle' block>
-                    Journalists
-                  </Button>
-                  <Button appearance='subtle' block>
-                    Non-profits
-                  </Button>
-                </Nav>
-              </Sidenav.Body>
-            </Sidenav>
+      <Container>
+        <Row>
+          <Col xs={3}>
+            <Menu>
+              <MenuItem text='Politics' />
+              <MenuItem text='Finance' />
+              <MenuItem text='Business' />
+              <MenuItem text='Academia' />
+              <MenuItem text='Journalists' />
+              <MenuItem text='Non-profits' />
+            </Menu>
           </Col>
-          <Col xs={15}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Avatar size='lg' src={user_profile.profile_pic} style={{ marginRight: "20px" }} />
-              <div>
-                <h2 style={{ marginBottom: "10px" }}>{user_profile.username}</h2>
-                <p style={{ marginBottom: "10px" }}>{user_profile.bio}</p>
-                <div style={{ marginBottom: "10px" }}>
-                  {user_profile.tags.map((tag: any) => (
-                    <Tag color='cyan' key={tag}>
-                      {tag}
-                    </Tag>
-                  ))}
+
+          <Col xs={9}>
+            <Card>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div size='lg' src={user_profile.profile_pic} style={{ marginRight: "20px" }} />
+                <div>
+                  <h2 style={{ marginBottom: "10px" }}>{user_profile.username}</h2>
+                  <p style={{ marginBottom: "10px" }}>{user_profile.bio}</p>
+                  <div style={{ marginBottom: "10px" }}>
+                    {user_profile.tags.map((tag: any) => (
+                      <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
+                        {tag}
+                      </Tag>
+                    ))}
+                  </div>
+                  <h5>{`Joined on ${user_profile.joined}`}</h5>
                 </div>
-                <Timeline>
-                  <Timeline.Item>{`Joined on ${user_profile.joined}`}</Timeline.Item>
-                </Timeline>
               </div>
-            </div>
-            <List>
+              <br />
+							
+
               {posts &&
                 posts.length > 0 &&
                 posts.map((post: any) => (
-                  <List.Item key={post.id}>
+                  <Card key={post.id}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      {/* @ts-ignore */}
-                      {/* <Avatar size='sm' src={post.author.profile_pic} style={{ marginRight: "10px" }} /> */}
                       <div>
                         <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
                         <p style={{ marginBottom: "0px" }}>{post.content}</p>
                         <div>
                           {post.tags?.map((tag: any) => (
-                            <Tag color='cyan' key={tag} style={{ marginRight: "5px" }}>
+                            <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
                               {tag}
                             </Tag>
                           ))}
                         </div>
-                        <Timeline style={{ marginTop: "5px" }}>
-                          <Timeline.Item>{`Posted on ${post.created_at}`}</Timeline.Item>
-                        </Timeline>
+                        <h5 style={{ marginTop: "5px" }}>{`Posted on ${post.created_at}`}</h5>
                       </div>
                     </div>
-                  </List.Item>
+                  </Card>
                 ))}
-            </List>
+            </Card>
           </Col>
         </Row>
-      </Content>
-      <Footer>
-        <p>Copyright © 2023</p>
-      </Footer>
-    </Container>
+      </Container>
+
+      <Navbar fixedToBottom>
+        <NavbarGroup align={Alignment.CENTER}>
+          <NavbarHeading>Copyright © 2023</NavbarHeading>
+        </NavbarGroup>
+      </Navbar>
+    </>
   );
 };
 
