@@ -2,6 +2,8 @@
   "name": "integrity-tracker",
   "version": "0.1.0",
   "private": true,
+
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -28,6 +30,7 @@
     "react-bootstrap": "^2.7.4",
     "react-d3-speedometer": "^1.1.0",
     "react-dom": "^18.2.0",
+    "react-speedometer": "^0.1.2",
     "rsuite": "^5.33.0",
     "typescript": "5.0.2",
     "url-join": "^5.0.0"

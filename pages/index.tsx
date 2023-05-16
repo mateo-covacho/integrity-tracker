@@ -43,7 +43,7 @@ const Home = (props: any) => {
         </NavbarGroup>
 
         <NavbarGroup align={Alignment.RIGHT}>
-          <Button
+          {/* <Button
             color='blue'
             className='ms-3'
             style={{ margin: "auto" }}
@@ -75,7 +75,7 @@ const Home = (props: any) => {
             }}
           >
             Get posts
-          </Button>
+          </Button> */}
 
           <Link href={`/profile/${userData?.id}`} className='ms-3' style={{ color: "inherit" }}>
             <Button color='blue' style={{ margin: "auto" }}>

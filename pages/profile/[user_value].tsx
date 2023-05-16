@@ -10,6 +10,7 @@ import { id } from "date-fns/locale";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { print } from "@/utils/print";
+import Post from "@/lib/Post";
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const UserProfile = (props: any) => {
@@ -37,38 +38,54 @@ const UserProfile = (props: any) => {
   const user_profile = props.data[0];
 
   return (
-    <>
+    <div style={{ width: "100vw" }}>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>User Profile</NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
-          <Button intent='danger' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
-            Sign out
-          </Button>
-          <Link href='/' style={{ color: "inherit" }}>
+          <Link className='ms-3' href='/' style={{ color: "inherit" }}>
             <Button intent='none' style={{ margin: "auto" }}>
               Home
             </Button>
           </Link>
+          <Button className='ms-3' intent='danger' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
+            Sign out
+          </Button>
         </NavbarGroup>
       </Navbar>
-
       <Container>
-        <Row>
-          <Col xs={3}>
-            <Menu>
-              <MenuItem text='Politics' />
-              <MenuItem text='Finance' />
-              <MenuItem text='Business' />
-              <MenuItem text='Academia' />
-              <MenuItem text='Journalists' />
-              <MenuItem text='Non-profits' />
-            </Menu>
+        <Row style={{ height: "100vh" }}>
+          <Col xs={3} className='outline_right'>
+            <h4>Categories</h4>
+            <br />
+            <Button alignText='right' fill={true}>
+              Politics
+            </Button>
+            <br />
+            <Button alignText='right' fill={true}>
+              Finance
+            </Button>
+            <br />
+            <Button alignText='right' fill={true}>
+              Business
+            </Button>
+            <br />
+            <Button alignText='right' fill={true}>
+              Academia
+            </Button>
+            <br />
+            <Button alignText='right' fill={true}>
+              Journalists
+            </Button>
+            <br />
+            <Button alignText='right' fill={true}>
+              Non-profits
+            </Button>
           </Col>
 
           <Col xs={9}>
-            <Card>
+            <Card style={{ height: "20vh" }}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div size='lg' src={user_profile.profile_pic} style={{ marginRight: "20px" }} />
                 <div>
@@ -85,39 +102,16 @@ const UserProfile = (props: any) => {
                 </div>
               </div>
               <br />
-							
-
-              {posts &&
-                posts.length > 0 &&
-                posts.map((post: any) => (
-                  <Card key={post.id}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div>
-                        <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
-                        <p style={{ marginBottom: "0px" }}>{post.content}</p>
-                        <div>
-                          {post.tags?.map((tag: any) => (
-                            <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
-                              {tag}
-                            </Tag>
-                          ))}
-                        </div>
-                        <h5 style={{ marginTop: "5px" }}>{`Posted on ${post.created_at}`}</h5>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
             </Card>
+            {posts &&
+              posts.length > 0 &&
+              posts.map((post: any) => (
+                <Post  title={post.title} content={post.content} tags={post.tags} created_at={post.created_at} />
+              ))}
           </Col>
         </Row>
       </Container>
-
-      <Navbar fixedToBottom>
-        <NavbarGroup align={Alignment.CENTER}>
-          <NavbarHeading>Copyright © 2023</NavbarHeading>
-        </NavbarGroup>
-      </Navbar>
-    </>
+    </div>
   );
 };
 
