@@ -59,7 +59,7 @@ const Category = (props: any) => {
         <Row style={{ height: "100vh" }}>
           <Sidemenu />
 
-          <Col xs={9}>{posts && posts.length > 0 && posts.map((post: any) => <Post post={post} />)}</Col>
+          <Col xs={9}>{posts && posts.length > 0 && posts.map((post: any) => <Post key={post.id} post={post} />)}</Col>
         </Row>
       </Container>
     </div>

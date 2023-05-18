@@ -80,7 +80,7 @@ const UserProfile = (props: any) => {
               </div>
               <br />
             </Card>
-            {posts && posts.length > 0 && posts.map((post: any) => <Post post={post} />)}
+            {posts && posts.length > 0 && posts.map((post: any) => <Post key={post.id} post={post} />)}
           </Col>
         </Row>
       </Container>

@@ -5,16 +5,18 @@ import urljoin from "url-join";
 import Link from "next/link";
 
 interface PostProps {
-  id: string;
-  user_id: string;
-  public_figure_id: string;
-  title: string;
-  content: string;
-  evidence_links: string[];
-  truth_score: number;
-  created_at: string;
-  updated_at: string;
-  category: string[];
+  post: {
+    id: string;
+    user_id: string;
+    public_figure_id: string;
+    title: string;
+    content: string;
+    evidence_links: string[];
+    truth_score: number;
+    created_at: string;
+    updated_at: string;
+    category: string[];
+  };
 }
 
 const Post = (props: PostProps) => {
