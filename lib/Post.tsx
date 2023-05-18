@@ -1,25 +1,40 @@
 import React from "react";
-import { Alignment, Button, Card, Menu, MenuItem, Navbar, NavbarGroup, NavbarHeading, Tag } from "@blueprintjs/core";
+import { Card, Tag } from "@blueprintjs/core";
+import { url } from "../utils/url";
+import urljoin from "url-join";
+import Link from "next/link";
 
-const Post = (post: any) => {
+interface PostProps {
+  id: string;
+  user_id: string;
+  public_figure_id: string;
+  title: string;
+  content: string;
+  evidence_links: string[];
+  truth_score: number;
+  created_at: string;
+  updated_at: string;
+  category: string[];
+}
+
+const Post = (props: PostProps) => {
+  const endpointPath = `/categories/${props.post.category}`;
+  const apiUrl = urljoin(url, endpointPath);
   return (
-    <Card className='my-4'>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div>
-          <h4 style={{ marginBottom: "5px" }}>{post.title}</h4>
-          {post.imageUrl && <img src={post.imageUrl} alt={post.title} style={{ width: "100%", height: "auto" }} />}
-          <p style={{ marginBottom: "0px" }}>{post.content}</p>
-          <div>
-            {post.tags?.map((tag: any) => (
-              <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
-                {tag}
-              </Tag>
-            ))}
-          </div>
-
-          <h5 style={{ marginTop: "5px" }}>{`Posted on ${post.created_at}`}</h5>
-        </div>
-      </div>
+    <Card className='mt-3'>
+      <h4>{props.post.title}</h4>
+      <Link href={apiUrl}>
+        <Tag>{props.post.category}</Tag>
+      </Link>
+      <p>{props.post.content}</p>
+      <p>Truth Score: {props.post.truth_score}</p>
+      <p>{new Date(props.post.created_at).toLocaleDateString()}</p>
+      {props.post.evidence_links &&
+        props.post.evidence_links.map((link, index) => (
+          <a key={index} href={link} target='_blank'>
+            Evidence Link {index + 1}
+          </a>
+        ))}
     </Card>
   );
 };

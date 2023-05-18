@@ -12,6 +12,8 @@ import { Card, Col, Container, Nav, Row } from "react-bootstrap";
 import styles from "@/styles/Home.module.css";
 import urljoin from "url-join";
 import { url } from "../utils/url";
+import Sidemenu from "@/lib/Sidemenu";
+
 // import "../styles/outline.css"
 
 const supabaseClient = createBrowserSupabaseClient();
@@ -90,33 +92,7 @@ const Home = (props: any) => {
       </Navbar>
       <Container style={{ height: "100vh" }}>
         <Row>
-          <Col xs={3} className='text-end outline_right'>
-            <h4>Categories</h4>
-            <br />
-            <Button alignText='right' fill={true}>
-              Politics
-            </Button>
-            <br />
-            <Button alignText='right' fill={true}>
-              Finance
-            </Button>
-            <br />
-            <Button alignText='right' fill={true}>
-              Business
-            </Button>
-            <br />
-            <Button alignText='right' fill={true}>
-              Academia
-            </Button>
-            <br />
-            <Button alignText='right' fill={true}>
-              Journalists
-            </Button>
-            <br />
-            <Button alignText='right' fill={true}>
-              Non-profits
-            </Button>
-          </Col>
+          <Sidemenu />
           <Col xs={6}>
             <Row>
               <Col xs={12}>

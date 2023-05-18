@@ -1,5 +1,5 @@
 import { Alignment, Button, Card, Menu, MenuItem, Navbar, NavbarGroup, NavbarHeading, Tag } from "@blueprintjs/core";
-
+import "rsuite/dist/rsuite.min.css";
 import { Col, Container, Row } from "react-bootstrap";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -16,7 +16,7 @@ import Sidemenu from "@/lib/Sidemenu";
 
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-const UserProfile = (props: any) => {
+const Category = (props: any) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const router = useRouter();
@@ -37,8 +37,6 @@ const UserProfile = (props: any) => {
   useEffect(() => {
     console.log(props);
   }, [props]);
-
-  const user_profile = props.data[0];
 
   return (
     <div style={{ width: "100vw" }}>
@@ -61,27 +59,7 @@ const UserProfile = (props: any) => {
         <Row style={{ height: "100vh" }}>
           <Sidemenu />
 
-          <Col xs={9}>
-            <Card style={{ minHeight: "20vh" }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <img src={user_profile.profile_pic} style={{ marginRight: "20px" }} />
-                <div>
-                  <h2 style={{ marginBottom: "10px" }}>{user_profile.username}</h2>
-                  <p style={{ marginBottom: "10px" }}>{user_profile.bio}</p>
-                  <div style={{ marginBottom: "10px" }}>
-                    {user_profile.tags.map((tag: any) => (
-                      <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
-                        {tag}
-                      </Tag>
-                    ))}
-                  </div>
-                  <h5>{`Joined on ${user_profile.joined}`}</h5>
-                </div>
-              </div>
-              <br />
-            </Card>
-            {posts && posts.length > 0 && posts.map((post: any) => <Post post={post} />)}
-          </Col>
+          <Col xs={9}>{posts && posts.length > 0 && posts.map((post: any) => <Post post={post} />)}</Col>
         </Row>
       </Container>
     </div>
@@ -89,7 +67,7 @@ const UserProfile = (props: any) => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-  print("blue", "/profile/[user_value].tsx:getServerSideProps");
+  print("blue", "/profile/[category].tsx:getServerSideProps");
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx as any);
   // Check if we have a session
@@ -112,11 +90,11 @@ export const getServerSideProps = async (ctx: any) => {
 
   //console.log(user);
 
-  const user_value = ctx.params.user_value;
+  const category = ctx.params.category;
 
-  console.log("red", user_value);
+  print("red", category);
 
-  const user_data = await supabase.from("users").select("id").eq("id", user_value);
+  const user_data = await supabase.from("users").select("id").eq("id", category);
   // console.log(user_data);
   if (user_data.error === null) {
     //create user table
@@ -124,34 +102,16 @@ export const getServerSideProps = async (ctx: any) => {
     // create_user(user_uuid);
   }
 
-  const profile_data = async function load_profile_data(value: string) {
-    if (uuidRegex.test(value)) {
-      print("yellow", "uuid profile search");
-      const { data, error } = await supabase.from("users").select("*").eq("id", value);
-      return data;
-    } else {
-      print("yellow", "username profile search");
-      const { data, error } = await supabase.from("users").select("*").eq("username", value);
-      return data;
-    }
-  };
-
-  const data = await profile_data(user_value);
-  print("red", data);
-
-  // @ts-ignore
-  const id = data[0].id;
   // get user posts
-  const posts = await supabase.from("posts").select("*").eq("user_id", id);
+  const posts = await supabase.from("posts").select("*").eq("category", category);
   print("orange", JSON.stringify(posts, null, 2));
 
   print("blue", "_________________________________________________________");
 
   return {
     props: {
-      data,
       posts,
     },
   };
 };
-export default UserProfile;
+export default Category;
