@@ -1,24 +1,34 @@
 import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import Head from "next/head";
+
+import styles from "@/styles/Home.module.css";
+import { Button, Panel, ButtonGroup, Tag, Callout, Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from "@blueprintjs/core";
+import { Card, Col, Container, Nav, Row } from "react-bootstrap";
+import { Inter } from "next/font/google";
 
 import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
-import { Button, Panel, ButtonGroup, Tag, Callout, Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from "@blueprintjs/core";
-import { Card, Col, Container, Nav, Row } from "react-bootstrap";
-import styles from "@/styles/Home.module.css";
-import urljoin from "url-join";
-import { url } from "../utils/url";
-import Sidemenu from "@/lib/Sidemenu";
 
+import urljoin from "url-join";
+import { url } from "@/utils/url";
+import { print } from "@/utils/print";
+
+import Sidemenu from "@/lib/Sidemenu";
+import Post from "@/lib/Post";
+import Navbarcustom from "@/lib/Navbarcustom";
 // import "../styles/outline.css"
 
 const supabaseClient = createBrowserSupabaseClient();
 
 const inter = Inter({ subsets: ["latin"] });
+
+export function sign_out() {
+  supabaseClient.auth.signOut();
+}
 
 const Home = (props: any) => {
   const userData = useUser();
@@ -35,70 +45,22 @@ const Home = (props: any) => {
       }
     }
   }, [user]);
+
   return (
     <>
-      <Navbar>
-        <NavbarGroup align={Alignment.LEFT}>
-          <NavbarHeading style={{ height: "50%", width: "100%" }} className='my-auto'>
-            <img className='m-auto' style={{ maxWidth: "100%", maxHeight: "100%" }} src='../resources/logo2.png' alt='integrity tracker logo' />
-          </NavbarHeading>
-        </NavbarGroup>
-
-        <NavbarGroup align={Alignment.RIGHT}>
-          {/* <Button
-            color='blue'
-            className='ms-3'
-            style={{ margin: "auto" }}
-            onClick={async () => {
-              console.log(url);
-              const endpointPath = "/api/posts/get_posts";
-              const apiUrl = urljoin(url, endpointPath);
-              console.log(apiUrl);
-              const posts = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
-                body: JSON.stringify({
-                  // post_uuid: null,
-                  // user_uuid: "f8686c99-f440-49b6-9334-5eda66cf562b",
-                  // figure_uuid: null
-                  post_uuid: null,
-                  figure_uuid: "9f0f4a66-c2ef-4cd3-8364-04de12b5b993",
-                  user_uuid: null,
-                }),
-              })
-                .then((res) => res.json())
-                .then((res) => {
-                  return res.posts;
-                });
-              console.log(posts);
-            }}
-          >
-            Get posts
-          </Button> */}
-
-          <Link href={`/profile/${userData?.id}`} className='ms-3' style={{ color: "inherit" }}>
-            <Button color='blue' style={{ margin: "auto" }}>
-              Profile
-            </Button>
-          </Link>
-
-          <Button color='red' onClick={() => supabaseClient.auth.signOut()} className='ms-3' style={{ margin: "auto" }} intent='danger'>
-            Sign out
-          </Button>
-        </NavbarGroup>
-      </Navbar>
+      <Navbarcustom style={{ position: "absolute" }} userData={userData} signout_function={sign_out} />
       <Container style={{ height: "100vh" }}>
         <Row>
           <Sidemenu />
           <Col xs={6}>
             <Row>
               <Col xs={12}>
-                <Card className={styles.panel}></Card>
+                {props.latest_posts.map((post: any) => (
+                  <Post post={post} />
+                ))}
               </Col>
             </Row>
+
             <Row>
               <Col xs={12}></Col>
             </Row>
@@ -163,12 +125,14 @@ export const getServerSideProps = async (ctx: object) => {
     };
   }
 
-  // const { public_figures } = await supabaseClient.from("public_figures").select("*");
+  const { data: latest_posts } = await supabaseClient.from("posts").select("*").order("created_at", { ascending: false }).limit(10); // Adjust the limit to the desired number of posts
+
+  // print("red", latest_posts);
 
   return {
     props: {
       initialSession: session,
-      // public_figures: public_figures,
+      latest_posts,
       UserData: getUserData.data.user,
     },
   };

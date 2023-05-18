@@ -24,7 +24,7 @@ const Sidemenu = () => {
     return urljoin(url, endpointPath);
   }
   return (
-    <Col xs={3} className='outline_right'>
+    <Col xs={2} className='outline_right'>
       <h4>Categories</h4>
       <br />
       <Link href={get_category_url("Politics")}>
