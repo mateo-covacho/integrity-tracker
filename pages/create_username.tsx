@@ -160,7 +160,7 @@ export const getServerSideProps = async (ctx: object) => {
       },
     };
   }
-  let has_table_entry = false;
+  let has_table_entry = true;
   //  Check if user has a table entry
   try {
     const endpointPath = `/api/users/usertable_exists?uuid=${session.user.id}`;
@@ -192,7 +192,14 @@ export const getServerSideProps = async (ctx: object) => {
       },
     };
   }
-
+  if (has_table_entry && session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const {
     data: { user },
   } = await supabase.auth.getUser();
