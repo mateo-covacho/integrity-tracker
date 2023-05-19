@@ -22,9 +22,8 @@ import Post from "@/lib/Post";
 import Navbarcustom from "@/lib/Navbarcustom";
 // import "../styles/outline.css"
 
-const supabaseClient = createBrowserSupabaseClient();
-
 const inter = Inter({ subsets: ["latin"] });
+const supabaseClient = createBrowserSupabaseClient();
 
 export function sign_out() {
   supabaseClient.auth.signOut();
@@ -48,8 +47,8 @@ const Home = (props: any) => {
 
   return (
     <>
-      <Navbarcustom style={{ position: "absolute" }} userData={userData} signout_function={sign_out} />
-      <Container style={{ height: "100vh" }}>
+      <Navbarcustom userData={userData} signout_function={sign_out} />
+      <Container>
         <Row>
           <Sidemenu />
           <Col xs={6}>

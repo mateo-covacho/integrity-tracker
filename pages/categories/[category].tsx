@@ -13,12 +13,20 @@ import { print } from "@/utils/print";
 import Post from "@/lib/Post";
 import urljoin from "url-join";
 import Sidemenu from "@/lib/Sidemenu";
+import Navbarcustom from "@/lib/Navbarcustom";
 
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const supabaseClient = createBrowserSupabaseClient();
+
+export function sign_out() {
+  supabaseClient.auth.signOut();
+}
 
 const Category = (props: any) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+  const userData = useUser();
   const router = useRouter();
   const [data, setData] = useState();
   const [posts, setPosts] = useState(props.posts.data);
@@ -37,24 +45,14 @@ const Category = (props: any) => {
   useEffect(() => {
     console.log(props);
   }, [props]);
+  useEffect(() => {
+    setPosts(props.posts.data);
+  }, [props.posts]);
 
   return (
     <div style={{ width: "100vw" }}>
-      <Navbar>
-        <NavbarGroup align={Alignment.LEFT}>
-          <NavbarHeading>User Profile</NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align={Alignment.RIGHT}>
-          <Link className='ms-3' href='/' style={{ color: "inherit" }}>
-            <Button intent='none' style={{ margin: "auto" }}>
-              Home
-            </Button>
-          </Link>
-          <Button className='ms-3' intent='danger' onClick={() => supabaseClient.auth.signOut()} style={{ margin: "auto" }}>
-            Sign out
-          </Button>
-        </NavbarGroup>
-      </Navbar>
+      <Navbarcustom style={{ position: "absolute" }} userData={userData} signout_function={sign_out} />
+
       <Container>
         <Row style={{ height: "100vh" }}>
           <Sidemenu />

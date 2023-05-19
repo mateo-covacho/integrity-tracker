@@ -127,8 +127,19 @@ export const getServerSideProps = async (ctx: any) => {
   const data = await profile_data(user_value);
   print("red", data);
 
-  // @ts-ignore
-  const id = data[0].id;
+  let id;
+  try {
+    // @ts-ignore
+    id = data[0].id;
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+
   // get user posts
   const posts = await supabase.from("posts").select("*").eq("user_id", id);
   print("orange", JSON.stringify(posts, null, 2));
