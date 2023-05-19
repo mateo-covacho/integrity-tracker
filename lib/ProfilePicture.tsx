@@ -2,7 +2,17 @@ import { Icon, Menu, MenuItem } from "@blueprintjs/core";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import Link from "next/link";
 
-const ProfilePicture = ({ imageUrl, size = 40, signout_function, userData }) => {
+const ProfilePicture = ({
+  imageUrl,
+  size = 40,
+  signout_function,
+  userData,
+}: {
+  imageUrl: string;
+  size?: number;
+  signout_function: () => void;
+  userData: any;
+}) => {
   const handleSignOut = () => {
     // Handle sign out logic
   };
