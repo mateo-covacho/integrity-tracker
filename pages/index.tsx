@@ -55,7 +55,7 @@ const Home = (props: any) => {
             <Row>
               <Col xs={12}>
                 {props.latest_posts.map((post: any) => (
-                  <Post post={post} />
+                  <Post key={post.created_at} post={post} />
                 ))}
               </Col>
             </Row>
