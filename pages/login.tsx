@@ -62,7 +62,7 @@ function SignIn() {
               appearance={{ theme: ThemeSupa }}
               redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
               supabaseClient={supabaseClient}
-              providers={["google", "github"]}
+              providers={["google"]}
               socialLayout='horizontal'
             />
           </Col>
