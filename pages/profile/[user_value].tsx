@@ -134,7 +134,7 @@ export const getServerSideProps = async (ctx: any) => {
   } catch (error) {
     return {
       redirect: {
-        destination: "/404",
+        destination: "/create_username",
         permanent: false,
       },
     };
