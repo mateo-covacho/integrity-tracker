@@ -160,7 +160,7 @@ export const getServerSideProps = async (ctx: object) => {
       },
     };
   }
-  let has_table_entry = true;
+  let has_table_entry = false;
   //  Check if user has a table entry
   try {
     const endpointPath = `/api/users/usertable_exists?uuid=${session.user.id}`;
