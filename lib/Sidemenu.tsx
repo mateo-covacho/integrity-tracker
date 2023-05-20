@@ -32,7 +32,7 @@ interface PostProps {
   updated_at: string;
   category: string[];
 }
-const Sidemenu = ({ mdd, xss }) => {
+const Sidemenu = ({ mdd = 3, xss = 3 }: { mdd?: number; xss?: number }) => {
   let [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPage = router.pathname;
