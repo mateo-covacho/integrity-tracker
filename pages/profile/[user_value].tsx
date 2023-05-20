@@ -27,14 +27,14 @@ const UserProfile = (props: any) => {
 
   const supabase = createBrowserSupabaseClient();
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     console.log(user);
-  //     if (!user) {
-  //       router.push("/login");
-  //     }
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (!userData) {
+      console.log(userData);
+      if (!userData) {
+        router.push("/login");
+      }
+    }
+  }, [userData]);
 
   useEffect(() => {
     console.log(props);
