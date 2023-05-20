@@ -174,7 +174,7 @@ export const getServerSideProps = async (ctx: object) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        return res.exists == "True";
+        return res.exists === "True";
       });
   } catch (error) {
     print("red", "usertable exists error");

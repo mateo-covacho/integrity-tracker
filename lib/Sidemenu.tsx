@@ -32,7 +32,7 @@ interface PostProps {
   updated_at: string;
   category: string[];
 }
-const Sidemenu = () => {
+const Sidemenu = ({ mdd, xss }) => {
   let [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPage = router.pathname;
@@ -55,7 +55,7 @@ const Sidemenu = () => {
   }, [currentPage]);
 
   return (
-    <Col xs={2} className='outline_right'>
+    <Col md={mdd} xs={xss} className='outline_right'>
       <br />
       <Button intent='primary' alignText='right' fill={true} icon='plus'>
         Create post

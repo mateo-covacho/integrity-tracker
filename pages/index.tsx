@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Head from "next/head";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "@/styles/Home.module.css";
 import { Button, Panel, ButtonGroup, Tag, Callout, Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from "@blueprintjs/core";
 import { Card, Col, Container, Nav, Row } from "react-bootstrap";
@@ -44,27 +45,26 @@ const Home = (props: any) => {
       }
     }
   }, [user]);
+  // ver si por que no funciona el create username y se piensa que todos tienen????
 
   return (
     <>
       <Navbarcustom userData={userData} signout_function={sign_out} />
       <Container>
         <Row>
-          <Sidemenu />
-          <Col xs={6}>
-            <Row>
-              <Col xs={12}>
-                {props.latest_posts.map((post: any) => (
-                  <Post key={post.created_at} post={post} />
-                ))}
-              </Col>
-            </Row>
+          <Sidemenu mdd={3} xss={5} />
+          <Col md={6} xs={7}>
+            <Col xs={12}>
+              {props.latest_posts.map((post: any) => (
+                <Post key={post.created_at} post={post} />
+              ))}
+            </Col>
 
             <Row>
               <Col xs={12}></Col>
             </Row>
           </Col>
-          <Col xs={3} className='outline_left'>
+          <Col md={3} className='outline_left d-none d-sm-block'>
             <div id='hot-network-questions' className='module tex2jax_ignore'>
               <h4>Hot Network Questions</h4>
               <ul>
