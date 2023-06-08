@@ -71,9 +71,9 @@ function SignIn() {
     );
 
   return (
-    <>
+    <Container style={{height:"100vh"}}>
       <h1>Logged in</h1>
-    </>
+    </Container>
   );
 }
 
