@@ -52,7 +52,7 @@ const Home = (props: any) => {
       <Navbarcustom userData={userData} signout_function={sign_out} />
       <Container>
         <Row>
-          <Sidemenu mdd={3} xss={5} />
+          <Sidemenu md={3} xs={5} />
           <Col md={6} xs={7}>
             <Col xs={12}>
               {props.latest_posts.map((post: any) => (
