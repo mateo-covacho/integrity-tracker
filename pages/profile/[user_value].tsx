@@ -1,14 +1,4 @@
-import {
-  Alignment,
-  Button,
-  Card,
-  Menu,
-  MenuItem,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Tag,
-} from "@blueprintjs/core";
+import { Alignment, Button, Card, Menu, MenuItem, Navbar, NavbarGroup, NavbarHeading, Tag } from "@blueprintjs/core";
 
 import { Col, Container, Row } from "react-bootstrap";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -26,8 +16,7 @@ import Sidemenu from "@/lib/Sidemenu";
 import { sign_out } from "@/pages/index";
 import Navbarcustom from "@/lib/Navbarcustom";
 
-const uuidRegex =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const UserProfile = (props: any) => {
   const supabaseClient = useSupabaseClient();
@@ -38,14 +27,14 @@ const UserProfile = (props: any) => {
 
   const supabase = createBrowserSupabaseClient();
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     console.log(user);
-  //     if (!user) {
-  //       router.push("/login");
-  //     }
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (!userData) {
+      console.log(userData);
+      if (!userData) {
+        router.push("/login");
+      }
+    }
+  }, [userData]);
 
   useEffect(() => {
     console.log(props);
@@ -54,35 +43,22 @@ const UserProfile = (props: any) => {
 
   return (
     <div style={{ width: "100vw" }}>
-      <Navbarcustom
-        style={{ position: "absolute" }}
-        userData={userData}
-        signout_function={sign_out}
-      />
+      <Navbarcustom style={{ position: "absolute" }} userData={userData} signout_function={sign_out} />
 
       <Container>
         <Row style={{ height: "100vh" }}>
           <Sidemenu />
 
-          <Col>
-            <Card>
+          <Col xs={9}>
+            <Card style={{ minHeight: "20vh" }}>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <img
-                  src={user_profile.profile_pic}
-                  style={{ marginRight: "20px" }}
-                />
+                <img src={user_profile.profile_pic} style={{ marginRight: "20px" }} />
                 <div>
-                  <h2 style={{ marginBottom: "10px" }}>
-                    {user_profile.username}
-                  </h2>
+                  <h2 style={{ marginBottom: "10px" }}>{user_profile.username}</h2>
                   <p style={{ marginBottom: "10px" }}>{user_profile.bio}</p>
                   <div style={{ marginBottom: "10px" }}>
                     {user_profile.tags.map((tag: any) => (
-                      <Tag
-                        intent="primary"
-                        key={tag}
-                        style={{ marginRight: "5px" }}
-                      >
+                      <Tag intent='primary' key={tag} style={{ marginRight: "5px" }}>
                         {tag}
                       </Tag>
                     ))}
@@ -92,9 +68,7 @@ const UserProfile = (props: any) => {
               </div>
               <br />
             </Card>
-            {posts &&
-              posts.length > 0 &&
-              posts.map((post: any) => <Post key={post.id} post={post} />)}
+            {posts && posts.length > 0 && posts.map((post: any) => <Post key={post.id} post={post} />)}
           </Col>
         </Row>
       </Container>
@@ -130,10 +104,7 @@ export const getServerSideProps = async (ctx: any) => {
 
   console.log("red", user_value);
 
-  const user_data = await supabase
-    .from("users")
-    .select("id")
-    .eq("id", user_value);
+  const user_data = await supabase.from("users").select("id").eq("id", user_value);
   // console.log(user_data);
   if (user_data.error === null) {
     //create user table
@@ -144,17 +115,11 @@ export const getServerSideProps = async (ctx: any) => {
   const profile_data = async function load_profile_data(value: string) {
     if (uuidRegex.test(value)) {
       print("yellow", "uuid profile search");
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", value);
+      const { data, error } = await supabase.from("users").select("*").eq("id", value);
       return data;
     } else {
       print("yellow", "username profile search");
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("username", value);
+      const { data, error } = await supabase.from("users").select("*").eq("username", value);
       return data;
     }
   };
