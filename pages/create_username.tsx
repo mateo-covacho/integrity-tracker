@@ -29,7 +29,6 @@ import { print } from "@/utils/print";
 
 import urljoin from "url-join";
 import { url } from "../utils/url";
-import { type } from "os";
 
 function Create_username(props: any) {
   const supabaseClient = useSupabaseClient();
@@ -79,11 +78,14 @@ function Create_username(props: any) {
                   const endpointPath = `/api/users/username_check?username=${username}`;
                   const apiUrl = urljoin(url, endpointPath);
                   const valid_username = await fetch(apiUrl, {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                       "Content-Type": "application/json",
                       Accept: "application/json",
                     },
+                    body: JSON.stringify({
+                      username: username,
+                    }),
                   })
                     .then((res) => res.json())
                     .then((res) => {
@@ -117,10 +119,7 @@ function Create_username(props: any) {
                           return res;
                         });
                     } catch (error) {
-                      if (error) {
-                        alert("User already exists");
-                      }
-                      console.log(typeof error);
+                      print("red", error);
                     }
                     print("green", response);
                     if (response.statusText === "Created") {
@@ -175,7 +174,7 @@ export const getServerSideProps = async (ctx: object) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        return res.exists;
+        return res.exists === "True";
       });
   } catch (error) {
     print("red", "usertable exists error");

@@ -28,7 +28,6 @@ import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 // import urljoin from 'url-join';
 import { url } from "../utils/url";
-import urljoin from "url-join";
 
 function SignIn() {
   const supabaseClient = useSupabaseClient();
@@ -98,9 +97,9 @@ export const getServerSideProps = async (ctx: object) => {
     // @ts-ignore
     print("red", url);
 
-    const endpointPath = `/api/users/usertable_exists?uuid=${user?.id}`;
-    const apiUrl = urljoin(url, endpointPath);
-    has_table_entry = await fetch(apiUrl, {
+    // const endpointPath = `/api/users/usertable_exists?uuid=${user?.id}`;
+    // const apiUrl = urljoin(url, endpointPath);
+    has_table_entry = await fetch(url + `/api/users/usertable_exists?uuid=${user?.id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -110,7 +109,7 @@ export const getServerSideProps = async (ctx: object) => {
       .then((res) => res.json())
       .then((res) => {
         // @ts-ignore
-        return res.exists;
+        return res.exists === "True";
       });
     print("orange", `${user?.id} has table entry: ${has_table_entry}`);
   }
