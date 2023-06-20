@@ -1,29 +1,14 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import {
-  Button,
-  Container,
-  Header,
-  Content,
-  Footer,
-  Nav,
-  Sidebar,
-  Sidenav,
-  Grid,
-  Row,
-  Col,
-  Panel,
-  Placeholder,
-  Stack,
-  ButtonGroup,
-  Tag,
-  TagGroup,
-} from "rsuite";
+import { Container, Col, Row } from "react-bootstrap";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa, ThemeMinimal } from "@supabase/auth-ui-shared";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import { createBrowserSupabaseClient, createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import {
+  createBrowserSupabaseClient,
+  createServerSupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
 import "rsuite/dist/rsuite.min.css";
 import { print } from "@/utils/print";
 // import urljoin from 'url-join';
@@ -55,16 +40,20 @@ function SignIn() {
   const handleAuth = async () => {};
   if (!user)
     return (
-      <Container style={{ height: "100vh" }}>
-        <Row className='my-auto'>
-          <Col xsOffset={9} xs={6}>
-            <img src='/resources/logo1.png' alt='logo' style={{ width: "100%" }} />
+      <Container fluid style={{ height: "100vh" }}>
+        <Row className="d-flex ">
+          <Col xs={10} md={6} xl={4} className="justify-content-center mx-auto">
+            <img
+              src="/resources/logo1.png"
+              alt="logo"
+              style={{ width: "100%" }}
+            />
             <Auth
               appearance={{ theme: ThemeSupa }}
               redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
               supabaseClient={supabaseClient}
               providers={["google"]}
-              socialLayout='horizontal'
+              socialLayout="horizontal"
             />
           </Col>
         </Row>
