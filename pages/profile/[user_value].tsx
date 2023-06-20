@@ -54,7 +54,7 @@ const UserProfile = (props: any) => {
   const user_profile = props.data[0];
 
   return (
-    <div style={{ width: "100vw" }}>
+    <div style={{ width: "100vw", overflowY: "scroll" }}>
       <Navbarcustom
         style={{ position: "absolute" }}
         userData={userData}
@@ -63,13 +63,11 @@ const UserProfile = (props: any) => {
 
       <Container>
         <Row style={{ height: "100vh" }}>
-          <Sidemenu />
+          <Sidemenu className="d-none d-md-block" />
 
           <Col xs={9}>
             <Card style={{ minHeight: "20vh" }}>
               <div style={{ display: "flex", alignItems: "center" }}>
-             
-                
                 <div>
                   <h2 style={{ marginBottom: "10px" }}>
                     {user_profile.username}

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Container, Col, Row } from "react-bootstrap";
+import { Card } from "@blueprintjs/core";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa, ThemeMinimal } from "@supabase/auth-ui-shared";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -41,20 +42,27 @@ function SignIn() {
   if (!user)
     return (
       <Container fluid style={{ height: "100vh" }}>
-        <Row className="d-flex ">
-          <Col xs={10} md={6} xl={4} className="justify-content-center mx-auto">
-            <img
-              src="/resources/logo1.png"
-              alt="logo"
-              style={{ width: "100%" }}
-            />
-            <Auth
-              appearance={{ theme: ThemeSupa }}
-              redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
-              supabaseClient={supabaseClient}
-              providers={["google"]}
-              socialLayout="horizontal"
-            />
+        <Row className=" ">
+          <Col
+            xs={10}
+            md={6}
+            xl={4}
+            className="justify-content-center mx-auto  my-5"
+          >
+            <Card>
+              <img
+                src="/resources/logo1.png"
+                alt="logo"
+                style={{ width: "100%" }}
+              />
+              <Auth
+                appearance={{ theme: ThemeSupa }}
+                redirectTo={`https://mateo-covacho-musical-carnival-gwj6rrjww6p2wv76-3000.preview.app.github.dev/create_username`}
+                supabaseClient={supabaseClient}
+                providers={["google"]}
+                socialLayout="horizontal"
+              />
+            </Card>
           </Col>
         </Row>
       </Container>

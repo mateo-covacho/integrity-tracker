@@ -32,7 +32,15 @@ interface PostProps {
   updated_at: string;
   category: string[];
 }
-const Sidemenu = ({ mdd = 3, xss = 3 }: { mdd?: number; xss?: number }) => {
+const Sidemenu = ({
+  mdd = 3,
+  xss = 3,
+  className,
+}: {
+  mdd?: number;
+  xss?: number;
+  className?: string;
+}) => {
   let [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPage = router.pathname;
@@ -55,9 +63,9 @@ const Sidemenu = ({ mdd = 3, xss = 3 }: { mdd?: number; xss?: number }) => {
   }, [currentPage]);
 
   return (
-    <Col md={mdd} xs={xss} className='outline_right'>
+    <Col className={"outline_right" + className}>
       <br />
-      <Button intent='primary' alignText='right' fill={true} icon='plus'>
+      <Button intent="primary" alignText="right" fill={true} icon="plus">
         Create post
       </Button>
       <br />
@@ -69,43 +77,43 @@ const Sidemenu = ({ mdd = 3, xss = 3 }: { mdd?: number; xss?: number }) => {
       >
         <NavbarGroup>
           <h4>Categories</h4>
-          <Icon className='ms-3' icon={isOpen ? "chevron-up" : "add"} />
+          <Icon className="ms-3" icon={isOpen ? "chevron-up" : "add"} />
         </NavbarGroup>
       </Row>
       <br />
       <Collapse isOpen={isOpen}>
         <Link href={get_category_url("Politics")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Politics
           </Button>
         </Link>
         <br />
         <Link href={get_category_url("Finance")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Finance
           </Button>
         </Link>
         <br />
         <Link href={get_category_url("Business")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Business
           </Button>
         </Link>
         <br />
         <Link href={get_category_url("Academia")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Academia
           </Button>
         </Link>
         <br />
         <Link href={get_category_url("Journalists")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Journalists
           </Button>
         </Link>
         <br />
         <Link href={get_category_url("Non-profits")}>
-          <Button alignText='right' fill={true}>
+          <Button alignText="right" fill={true}>
             Non-profits
           </Button>
         </Link>
