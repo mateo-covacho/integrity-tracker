@@ -23,17 +23,17 @@ const Post = (props: PostProps) => {
   const endpointPath = `/categories/${props.post.category}`;
   const apiUrl = urljoin(url, endpointPath);
   return (
-    <Card className='mt-3'>
+    <Card className="mt-3">
       <h4>{props.post.title}</h4>
       <Link href={apiUrl}>
         <Tag>{props.post.category}</Tag>
       </Link>
       <p>{props.post.content}</p>
       <p>Truth Score: {props.post.truth_score}</p>
-      <p>{new Date(props.post.created_at).toLocaleDateString()}</p>
+      <p>{new Date(props.post.created_at).toLocaleDateString("en-US")}</p>
       {props.post.evidence_links &&
         props.post.evidence_links.map((link, index) => (
-          <a key={index} href={link} target='_blank'>
+          <a key={index} href={link} target="_blank">
             Evidence Link {index + 1}
           </a>
         ))}

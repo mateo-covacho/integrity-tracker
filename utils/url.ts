@@ -1,1 +1,2 @@
-export const url = "https://integrity-tracker.vercel.app/";
+export const url =
+  process.env.ROOT_LINK || "https://integrity-tracker.vercel.app/";
