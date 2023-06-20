@@ -62,7 +62,7 @@ const Home = (props: any) => {
   // ver si por que no funciona el create username y se piensa que todos tienen????
 
   return (
-    <>
+    <div className="body">
       <Navbarcustom userData={userData} signout_function={sign_out} />
       <Container>
         <Row>
@@ -144,7 +144,7 @@ const Home = (props: any) => {
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   );
 };
 

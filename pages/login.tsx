@@ -41,7 +41,7 @@ function SignIn() {
   const handleAuth = async () => {};
   if (!user)
     return (
-      <Container fluid style={{ height: "100vh" }}>
+      <Container fluid style={{ height: "100vh" }} className="body">
         <Row className=" ">
           <Col
             xs={10}
