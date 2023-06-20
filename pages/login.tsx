@@ -61,9 +61,9 @@ function SignIn() {
     );
 
   return (
-    <>
+    <div style={{ height: "100vh" }}>
       <h1>Logged in</h1>
-    </>
+    </div>
   );
 }
 
