@@ -64,8 +64,7 @@ const UserProfile = (props: any) => {
       <Container>
         <Row style={{ height: "100vh" }}>
           <Sidemenu className="d-none d-md-block" />
-
-          <Col xs={9}>
+          <Col xs={12} md={9}>
             <Card style={{ minHeight: "20vh" }}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div>
@@ -89,6 +88,8 @@ const UserProfile = (props: any) => {
               </div>
               <br />
             </Card>
+            <hr className="solid" />
+
             {posts &&
               posts.length > 0 &&
               posts.map((post: any) => <Post key={post.id} post={post} />)}

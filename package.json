@@ -33,7 +33,8 @@
     "react-speedometer": "^0.1.2",
     "rsuite": "^5.33.0",
     "typescript": "5.0.2",
-    "url-join": "^5.0.0"
+    "url-join": "^5.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "supabase": "^1.47.2"

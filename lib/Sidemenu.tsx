@@ -12,6 +12,13 @@ import {
   Alignment,
   Collapse,
   Icon,
+  Dialog,
+  DialogFooter,
+  DialogBody,
+  FormGroup,
+  InputGroup,
+  TextArea,
+  TagInput,
 } from "@blueprintjs/core";
 import { url } from "../utils/url";
 import urljoin from "url-join";
@@ -19,7 +26,7 @@ import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
+import { print } from "../utils/print";
 interface PostProps {
   id: string;
   user_id: string;
@@ -32,42 +39,198 @@ interface PostProps {
   updated_at: string;
   category: string[];
 }
+const categories = [
+  "Politics",
+  "Finance",
+  "Business",
+  "Academia",
+  "Journalists",
+  "Non-profits",
+];
 const Sidemenu = ({
   mdd = 3,
   xss = 3,
-  className,
+  className = " ",
 }: {
   mdd?: number;
   xss?: number;
   className?: string;
 }) => {
-  let [isOpen, setIsOpen] = useState(false);
+  let [categoriesIsOpen, setCategoriesIsOpen] = useState(false);
+  let [isDialogOpen, setisDialogOpen] = useState(false);
   const router = useRouter();
   const currentPage = router.pathname;
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [evidenceLinks, setEvidenceLinks] = useState([]);
+  const [category, setCategory] = useState("");
+  const [public_figure, setpublic_figure] = useState("");
+  const [public_figures, setpublic_figures] = useState([]);
+  const handleFormSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
 
+    console.log(title, content, evidenceLinks, category);
+
+    setTitle("");
+    setContent("");
+    setEvidenceLinks([]);
+    setCategory("");
+  };
   function get_category_url(category: string) {
     const endpointPath = `/categories/${category.toLowerCase()}`;
     return urljoin(url, endpointPath);
   }
 
   function handleCollapse() {
-    setIsOpen(!isOpen);
+    setCategoriesIsOpen(!categoriesIsOpen);
   }
 
   useEffect(() => {
     if (currentPage === "/categories/[category]") {
-      setIsOpen(true);
+      setCategoriesIsOpen(true);
     } else {
-      setIsOpen(false);
+      setCategoriesIsOpen(false);
     }
   }, [currentPage]);
 
+  async function get_public_figures(q: string): Promise<object[]> {
+    let ress = await fetch(
+      urljoin(url, `/api/public_figures/get_public_figures?q=${q}`)
+    ).then((res) => res.json());
+
+    return ress.data;
+  }
+
+  let last_request_timestamp = 0;
+  useEffect(() => {
+    if (public_figure.length > 2) {
+      const fetchData = async () => {
+        console.log("red", "public_figure query: " + public_figure);
+        last_request_timestamp = Date.now();
+        const public_figures = await get_public_figures(public_figure);
+        //@ts-ignore
+        setpublic_figures(public_figures);
+        console.log(public_figures);
+      };
+
+      fetchData();
+    }
+  }, [public_figure]);
   return (
-    <Col className={"outline_right" + className}>
+    <Col className={className + " outline_right"}>
       <br />
-      <Button intent="primary" alignText="right" fill={true} icon="plus">
+      <Button
+        intent="primary"
+        alignText="right"
+        fill={true}
+        icon="plus"
+        onClick={() => {
+          setisDialogOpen(!isDialogOpen);
+        }}
+      >
         Create post
       </Button>
+      <Dialog isOpen={isDialogOpen} title="Create a post" icon="add">
+        <DialogBody>
+          <form onSubmit={handleFormSubmit}>
+            {/* title */}
+            <FormGroup label="Title" labelFor="title-input">
+              <InputGroup
+                id="title-input"
+                placeholder="Enter post title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </FormGroup>
+
+            {/* content */}
+            <FormGroup label="Content" labelFor="content-input">
+              <TextArea
+                id="content-input"
+                placeholder="Enter post content"
+                value={content}
+                style={{ width: "100%" }}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </FormGroup>
+
+            {/* evidence links */}
+            <FormGroup
+              label="Links to evidence"
+              labelFor="evidence-links-input"
+            >
+              <TagInput
+                id="evidence-links-input "
+                className="blacktext "
+                placeholder="Enter evidence links"
+                values={evidenceLinks}
+                onChange={(values) => setEvidenceLinks(values)}
+                style={{ color: "black", width: "100%" }}
+              />
+            </FormGroup>
+
+            {/* category */}
+            <FormGroup
+              label="Category"
+              labelFor="category-input"
+              className="w-50"
+            >
+              <input
+                id="category-input"
+                className="bp4-input"
+                list="category-options"
+                placeholder="Select category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              />
+              <datalist id="category-options">
+                {categories.map((category: string) => (
+                  <option key={category} value={category} />
+                ))}
+              </datalist>
+            </FormGroup>
+
+            {/* public figure */}
+            <FormGroup
+              label="Public figure"
+              labelFor="category-input"
+              className="w-50"
+            >
+              <input
+                id="public_figure-input"
+                className="bp4-input ms-2"
+                list="public_figure-options"
+                placeholder="Select public figure"
+                value={public_figure}
+                onChange={(e) => setpublic_figure(e.target.value)}
+              />
+              <datalist id="public_figure-options">
+                {public_figures.map((public_figure: object) => (
+                  // @ts-ignore
+                  <option key={public_figure.id} value={public_figure.name} />
+                ))}
+              </datalist>
+            </FormGroup>
+          </form>
+        </DialogBody>
+        <DialogFooter
+          actions={
+            <>
+              <Button intent="primary" type="submit" onClick={handleFormSubmit}>
+                Submit
+              </Button>
+
+              <Button
+                intent="danger"
+                text="Close"
+                onClick={() => {
+                  setisDialogOpen(!isDialogOpen);
+                }}
+              />
+            </>
+          }
+        />
+      </Dialog>
       <br />
       <Row
         onClick={() => {
@@ -77,11 +240,14 @@ const Sidemenu = ({
       >
         <NavbarGroup>
           <h4>Categories</h4>
-          <Icon className="ms-3" icon={isOpen ? "chevron-up" : "add"} />
+          <Icon
+            className="ms-3"
+            icon={categoriesIsOpen ? "chevron-up" : "add"}
+          />
         </NavbarGroup>
       </Row>
       <br />
-      <Collapse isOpen={isOpen}>
+      <Collapse isOpen={categoriesIsOpen}>
         <Link href={get_category_url("Politics")}>
           <Button alignText="right" fill={true}>
             Politics
