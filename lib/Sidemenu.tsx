@@ -27,6 +27,14 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { print } from "../utils/print";
+import { MenuItem2 } from "@blueprintjs/popover2";
+import { Select2 } from "@blueprintjs/select";
+import { UUID } from "crypto";
+import {
+  get_public_figures,
+  public_figure_UUID_exists,
+} from "./functions/public_figure_exists";
+
 interface PostProps {
   id: string;
   user_id: string;
@@ -39,6 +47,17 @@ interface PostProps {
   updated_at: string;
   category: string[];
 }
+
+interface PublicFigure {
+  id: UUID;
+  name: string;
+  occupation: string;
+  bio: string;
+  image_url: string;
+  created_at: EpochTimeStamp;
+  updated_at: EpochTimeStamp;
+}
+
 const categories = [
   "Politics",
   "Finance",
@@ -47,10 +66,12 @@ const categories = [
   "Journalists",
   "Non-profits",
 ];
+
 const Sidemenu = ({
   mdd = 3,
   xss = 3,
   className = " ",
+  ...props
 }: {
   mdd?: number;
   xss?: number;
@@ -64,18 +85,50 @@ const Sidemenu = ({
   const [content, setContent] = useState("");
   const [evidenceLinks, setEvidenceLinks] = useState([]);
   const [category, setCategory] = useState("");
-  const [public_figure, setpublic_figure] = useState("");
-  const [public_figures, setpublic_figures] = useState([]);
-  const handleFormSubmit = (e: { preventDefault: () => void }) => {
+
+  // const [public_figure, setpublic_figure] = useState("");
+  // const [public_figures, setpublic_figures] = useState([]);
+  // const [inputValue, set_InputValue] = useState("");
+  // const [public_figure_uuid, set_public_figure_uuid] = useState("");
+
+  const [public_figure_input_field, set_public_figure_input_field] =
+    useState<String>("");
+  const [public_figures_matching_query, set_public_figures_matching_query] =
+    useState<PublicFigure[]>([]);
+  let final_public_figure_uuid ;
+
+  const handle_public_figures_form_submit = (e: {
+    preventDefault: () => void;
+  }): void => {
     e.preventDefault();
 
-    console.log(title, content, evidenceLinks, category);
+    final_public_figure_uuid = public_figures_matching_query.find(
+      (figure) => figure.name === public_figure_input_field
+    )?.id;
 
-    setTitle("");
-    setContent("");
-    setEvidenceLinks([]);
-    setCategory("");
+    console.log(`checking is PF exists for ${final_public_figure_uuid}...`);
+    console.log(
+      `result ${public_figure_UUID_exists(final_public_figure_uuid)}...`
+    );
+    if (!public_figure_UUID_exists(final_public_figure_uuid)) {
+      alert("Public figure not valid");
+    } else {
+      console.log(
+        title,
+        content,
+        evidenceLinks,
+        category,
+        final_public_figure_uuid
+      );
+
+      setTitle("");
+      setContent("");
+      setEvidenceLinks([]);
+      setCategory("");
+      set_public_figure_input_field("");
+    }
   };
+
   function get_category_url(category: string) {
     const endpointPath = `/categories/${category.toLowerCase()}`;
     return urljoin(url, endpointPath);
@@ -93,31 +146,25 @@ const Sidemenu = ({
     }
   }, [currentPage]);
 
-  async function get_public_figures(q: string): Promise<object[]> {
-    let ress = await fetch(
-      urljoin(url, `/api/public_figures/get_public_figures?q=${q}`)
-    ).then((res) => res.json());
-
-    return ress.data;
-  }
-
-  let last_request_timestamp = 0;
   useEffect(() => {
-    if (public_figure.length > 2) {
+    if (public_figure_input_field.length > 4) {
       const fetchData = async () => {
-        console.log("red", "public_figure query: " + public_figure);
-        last_request_timestamp = Date.now();
-        const public_figures = await get_public_figures(public_figure);
+        console.log("red", "public_figure query: " + public_figure_input_field);
+
+        const public_figures = await get_public_figures(
+          public_figure_input_field
+        );
+
         //@ts-ignore
-        setpublic_figures(public_figures);
+        set_public_figures_matching_query(public_figures);
         console.log(public_figures);
       };
 
       fetchData();
     }
-  }, [public_figure]);
+  }, [public_figure_input_field]);
   return (
-    <Col className={className + " outline_right"}>
+    <Col props className={className + " outline_right "}>
       <br />
       <Button
         intent="primary"
@@ -132,8 +179,8 @@ const Sidemenu = ({
       </Button>
       <Dialog isOpen={isDialogOpen} title="Create a post" icon="add">
         <DialogBody>
-          <form onSubmit={handleFormSubmit}>
-            {/* title */}
+          <form onSubmit={handle_public_figures_form_submit}>
+            {/* post title */}
             <FormGroup label="Title" labelFor="title-input">
               <InputGroup
                 id="title-input"
@@ -143,7 +190,7 @@ const Sidemenu = ({
               />
             </FormGroup>
 
-            {/* content */}
+            {/* post content */}
             <FormGroup label="Content" labelFor="content-input">
               <TextArea
                 id="content-input"
@@ -154,7 +201,7 @@ const Sidemenu = ({
               />
             </FormGroup>
 
-            {/* evidence links */}
+            {/* post evidence links */}
             <FormGroup
               label="Links to evidence"
               labelFor="evidence-links-input"
@@ -169,7 +216,7 @@ const Sidemenu = ({
               />
             </FormGroup>
 
-            {/* category */}
+            {/* post category */}
             <FormGroup
               label="Category"
               labelFor="category-input"
@@ -194,18 +241,18 @@ const Sidemenu = ({
             <FormGroup
               label="Public figure"
               labelFor="category-input"
-              className="w-50"
+              className="w-100"
             >
               <input
                 id="public_figure-input"
-                className="bp4-input ms-2"
+                className="bp4-input "
                 list="public_figure-options"
                 placeholder="Select public figure"
-                value={public_figure}
-                onChange={(e) => setpublic_figure(e.target.value)}
+                value={public_figure_input_field}
+                onChange={(e) => set_public_figure_input_field(e.target.value)}
               />
               <datalist id="public_figure-options">
-                {public_figures.map((public_figure: object) => (
+                {public_figures_matching_query.map((public_figure: object) => (
                   // @ts-ignore
                   <option key={public_figure.id} value={public_figure.name} />
                 ))}
@@ -216,7 +263,11 @@ const Sidemenu = ({
         <DialogFooter
           actions={
             <>
-              <Button intent="primary" type="submit" onClick={handleFormSubmit}>
+              <Button
+                intent="primary"
+                type="submit"
+                onClick={handle_public_figures_form_submit}
+              >
                 Submit
               </Button>
 
@@ -231,6 +282,7 @@ const Sidemenu = ({
           }
         />
       </Dialog>
+
       <br />
       <Row
         onClick={() => {

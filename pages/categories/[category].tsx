@@ -1,4 +1,14 @@
-import { Alignment, Button, Card, Menu, MenuItem, Navbar, NavbarGroup, NavbarHeading, Tag } from "@blueprintjs/core";
+import {
+  Alignment,
+  Button,
+  Card,
+  Menu,
+  MenuItem,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Tag,
+} from "@blueprintjs/core";
 import "rsuite/dist/rsuite.min.css";
 import { Col, Container, Row } from "react-bootstrap";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -15,7 +25,8 @@ import urljoin from "url-join";
 import Sidemenu from "@/lib/Sidemenu";
 import Navbarcustom from "@/lib/Navbarcustom";
 
-const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuidRegex =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const supabaseClient = createBrowserSupabaseClient();
 
@@ -51,13 +62,20 @@ const Category = (props: any) => {
 
   return (
     <div style={{ width: "100vw" }}>
-      <Navbarcustom style={{ position: "absolute" }} userData={userData} signout_function={sign_out} />
+      <Navbarcustom
+        style={{ position: "absolute" }}
+        userData={userData}
+        signout_function={sign_out}
+      />
 
       <Container>
         <Row style={{ height: "100vh" }}>
           <Sidemenu />
-
-          <Col xs={9}>{posts && posts.length > 0 && posts.map((post: any) => <Post key={post.id} post={post} />)}</Col>
+          <Col md={8}>
+            {posts &&
+              posts.length > 0 &&
+              posts.map((post: any) => <Post key={post.id} post={post} />)}
+          </Col>
         </Row>
       </Container>
     </div>
@@ -92,7 +110,10 @@ export const getServerSideProps = async (ctx: any) => {
 
   print("red", category);
 
-  const user_data = await supabase.from("users").select("id").eq("id", category);
+  const user_data = await supabase
+    .from("users")
+    .select("id")
+    .eq("id", category);
   // console.log(user_data);
   if (user_data.error === null) {
     //create user table
@@ -101,7 +122,10 @@ export const getServerSideProps = async (ctx: any) => {
   }
 
   // get user posts
-  const posts = await supabase.from("posts").select("*").eq("category", category);
+  const posts = await supabase
+    .from("posts")
+    .select("*")
+    .eq("category", category);
   print("orange", JSON.stringify(posts, null, 2));
 
   print("blue", "_________________________________________________________");
