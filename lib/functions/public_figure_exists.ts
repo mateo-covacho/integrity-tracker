@@ -7,7 +7,8 @@ export async function public_figure_UUID_exists(uuid: any): Promise<boolean> {
   return response.length === 1;
 }
 
-export async function get_public_figures(q: string): Promise<PublicFigure[]> {
+// @ts-ignore
+export async function get_public_figures(q: String): Promise<PublicFigure[]> {
   let ress = await fetch(
     urljoin(url, `/api/public_figures/get_public_figures?q=${q}`)
   ).then((res) => res.json());

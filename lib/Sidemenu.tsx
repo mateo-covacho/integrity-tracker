@@ -95,7 +95,7 @@ const Sidemenu = ({
     useState<String>("");
   const [public_figures_matching_query, set_public_figures_matching_query] =
     useState<PublicFigure[]>([]);
-  let final_public_figure_uuid ;
+  let final_public_figure_uuid;
 
   const handle_public_figures_form_submit = (e: {
     preventDefault: () => void;
@@ -207,10 +207,12 @@ const Sidemenu = ({
               labelFor="evidence-links-input"
             >
               <TagInput
+                //@ts-ignore
                 id="evidence-links-input "
                 className="blacktext "
                 placeholder="Enter evidence links"
                 values={evidenceLinks}
+                //@ts-ignore
                 onChange={(values) => setEvidenceLinks(values)}
                 style={{ color: "black", width: "100%" }}
               />
@@ -248,6 +250,7 @@ const Sidemenu = ({
                 className="bp4-input "
                 list="public_figure-options"
                 placeholder="Select public figure"
+                //@ts-ignore
                 value={public_figure_input_field}
                 onChange={(e) => set_public_figure_input_field(e.target.value)}
               />
